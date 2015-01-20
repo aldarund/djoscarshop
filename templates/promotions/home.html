@@ -10,7 +10,7 @@
 	<!-- // PARTICULAR PAGES CSS FILES -->
 {% endblock %}
 
-{% block extrascript %}
+{% block extrascripts %}
 	<!-- Particular Page Javascripts -->
 	<script src="{% static 'oscar/js/jquery.flexslider-min.js' %}"></script>
 	<script src="{% static 'oscar/js/homeslider-flexslider.js' %}"></script>
@@ -147,7 +147,7 @@
 						</div>
 
 						<div class="col-md-4">
-							<div class="promo inverse-background first-row animated" data-animation="fadeInDown" style="background: url('oscar/img/dummy/500x400.jpg') no-repeat; background-size: 100%;">
+						  <div class="promo inverse-background first-row animated" data-animation="fadeInDown" style="background: url('{% static 'oscar/img/dummy/500x400.jpg' %}') no-repeat; background-size: 100%;">
 								<div class="inner text-center np">
 									<div class="ribbon">
 										<h6 class="nmb">New Arrivals</h6>
