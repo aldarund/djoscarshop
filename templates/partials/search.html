@@ -1,0 +1,12 @@
+{% load i18n %}
+<!-- SEARCH BOX -->
+<div class="search-box">
+  <form action="{% url 'search:search' %}" method="GET">
+	<div class="input-iconed prepend">
+	  <button class="input-icon"><i class="iconfont-search"></i></button>
+	  <label for="input-search" class="placeholder">{% trans "Search" %} …</label>
+	  <input type="text" name="q" id="input-search" class="round-input full-width" required />
+	</div>
+  </form>
+</div>
+<!-- // SEARCH BOX -->

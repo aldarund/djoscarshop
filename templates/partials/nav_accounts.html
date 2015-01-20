@@ -1,4 +1,5 @@
 {% load currency_filters %}
+{% load category_tags %}
 {% load i18n %}
 {% load staticfiles %}
 
@@ -53,57 +54,33 @@
 		  </a>
 		</div>
 		<!-- // SITE LOGO -->
+
 		<!-- SITE NAVIGATION MENU -->
 		<nav id="site-menu" role="navigation">
 		  <ul class="main-menu hidden-sm hidden-xs">
 			<li class="active">
-			  <a href="index.html">Home</a>
+			  <a href="{{ homepage_url }}">Home</a>
 			</li>
+            {% category_tree depth=1 as tree_categories %}
+            {% for tree_category, info in tree_categories %}
 			<li>
-			  <a href="products.html">Women</a>
-			</li>
-			<li>
-			  <a href="products.html">Men</a>
-
+			  <a href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a>
 			  <!-- MEGA MENU -->
 			  <div class="mega-menu" data-col-lg="9" data-col-md="12">
 				<div class="row">
 
+                  {% category_tree depth=1 parent=tree_category as tree_categories %}
+                  {% for tree_category, info in tree_categories %}
 				  <div class="col-md-3">
-					<h4 class="menu-title">Clothing</h4>
+					<h4 class="menu-title">{{ tree_category.name }}</h4>
 					<ul class="mega-sub">
-					  <li><a href="products.html">Casual Wear</a></li>
-					  <li><a href="products.html">Evening Wear</a></li>
-					  <li><a href="products.html">Formal Attire</a></li>
-					  <li><a href="products.html">Womens Jeans</a></li>
-					  <li><a href="products.html">Mens Jeans</a></li>
-					  <li><a href="products.html">Fall Styles</a></li>
+                      {% category_tree depth=1 parent=tree_category as tree_categories %}
+                      {% for tree_category, info in tree_categories %}
+					  <li><a href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a></li>
+                      {% endfor %}
 					</ul>
 				  </div>
-
-				  <div class="col-md-3">
-					<h4 class="menu-title">Accessories</h4>
-					<ul class="mega-sub">
-					  <li><a href="products.html">Casual Wear</a></li>
-					  <li><a href="products.html">Evening Wear</a></li>
-					  <li><a href="products.html">Formal Attire</a></li>
-					  <li><a href="products.html">Womens Jeans</a></li>
-					  <li><a href="products.html">Mens Jeans</a></li>
-					  <li><a href="products.html">Fall Styles</a></li>
-					</ul>
-				  </div>
-
-				  <div class="col-md-3">
-					<h4 class="menu-title">Brands</h4>
-					<ul class="mega-sub">
-					  <li><a href="products.html">Casual Wear</a></li>
-					  <li><a href="products.html">Evening Wear</a></li>
-					  <li><a href="products.html">Formal Attire</a></li>
-					  <li><a href="products.html">Womens Jeans</a></li>
-					  <li><a href="products.html">Mens Jeans</a></li>
-					  <li><a href="products.html">Fall Styles</a></li>
-					</ul>
-				  </div>
+                  {% endfor %}
 
 				  <div class="col-md-3">
 					<div class="carousel slide m-b" data-ride="carousel">
@@ -126,6 +103,7 @@
 			  <!-- // MEGA MENU -->
 
 			</li>
+            {% endfor %}
 			<li>
 			  <a href="components.html">Components</a>
 			</li>
@@ -145,36 +123,11 @@
 				<a href="javsacript:void(0);">Home</a>
 			  </li>
 			  <li>
-				<a href="javsacript:void(0);">Women</a>
-			  </li>
-			  <li>
 				<a href="javsacript:void(0);">Men</a>
 
 				<ul class="dl-submenu">
 				  <li>
 					<a href="products.html">Clothing</a>
-					<ul class="dl-submenu">
-					  <li><a href="products.html">Casual Wear</a></li>
-					  <li><a href="products.html">Evening Wear</a></li>
-					  <li><a href="products.html">Formal Attire</a></li>
-					  <li><a href="products.html">Womens Jeans</a></li>
-					  <li><a href="products.html">Mens Jeans</a></li>
-					  <li><a href="products.html">Fall Styles</a></li>
-					</ul>
-				  </li>
-				  <li>
-					<a href="products.html">Accessories</a>
-					<ul class="dl-submenu">
-					  <li><a href="products.html">Casual Wear</a></li>
-					  <li><a href="products.html">Evening Wear</a></li>
-					  <li><a href="products.html">Formal Attire</a></li>
-					  <li><a href="products.html">Womens Jeans</a></li>
-					  <li><a href="products.html">Mens Jeans</a></li>
-					  <li><a href="products.html">Fall Styles</a></li>
-					</ul>
-				  </li>
-				  <li>
-					<a href="products.html">Brands</a>
 					<ul class="dl-submenu">
 					  <li><a href="products.html">Casual Wear</a></li>
 					  <li><a href="products.html">Evening Wear</a></li>
