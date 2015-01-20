@@ -1,0 +1,49 @@
+/*-----------------------------------------------------------------------------
+
+REVOLUTION RESPONSIVE BASIC STYLES OF HTML DOCUMENT
+
+Screen Stylesheet
+
+version:   	1.0
+date:      	26/06/12
+author:		themepunch
+email:     	support@themepunch.com
+website:   	http://www.themepunch.com
+-----------------------------------------------------------------------------*/
+
+
+  /*********************************************************************************************
+		-	SET THE SCREEN SIZES FOR THE BANNER IF YOU WISH TO MAKE THE BANNER RESOPONSIVE 	-
+  **********************************************************************************************/
+
+  /*	-	THE BANNER CONTAINER (Padding, Shadow, Border etc. )	-	*/
+
+
+ .fullwidthbanner-container{
+	width:100% !important;
+	position:relative;
+	padding:0;
+	max-height:465px !important;
+	overflow:hidden;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 989px) {
+	.gfc.round {
+		width: 200px;
+		height: 200px;
+		font-size: 42px;
+	}
+}
+@media only screen and (max-width: 768px) {
+	.gfc.round {
+		width: 80px;
+		height: 80px;
+		font-size: 36px;
+	}
+	.tp-leftarrow {
+		left: 25px !important;
+	}
+	.tp-rightarrow {
+		right: 25px !important;
+	}
+}
