@@ -1,0 +1,5 @@
+Django
+django-split-settings
+django-oscar
+django-compress
+django-environ
