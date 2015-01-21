@@ -35,16 +35,22 @@
 
 		  </div>
 		  <div class="clearfix"></div>
+
 		  <!-- USER RELATED MENU -->
 		  <nav id="tiny-menu" class="clearfix">
 			<ul class="user-menu">
-			  <li><a href="#">My Account</a></li>
-			  <li><a href="cart.html">My Wishlist</a></li>
+              {% if user.is_authenticated %}
+			  <li><a href="{% url 'customer:summary' %}">{% trans 'Account' %}</a></li>
+			  <li><a href="{% url 'customer:wishlists-list' %}">{% trans 'Wish Lists' %}</a></li>
 			  <li><a href="checkout.html">Checkout</a></li>
-			  <li><a href="#">Log Out</a></li>
+			  <li><a href="{% url 'customer:logout' %}">{% trans 'Logout' %}</a></li>
+              {% else %}
+			  <li><a href="{% url 'customer:login' %}">{% trans 'Login or register' %}</a></li>
+              {% endif %}
 			</ul>
 		  </nav>
 		  <!-- // USER RELATED MENU -->
+
 		</div>
 		<!-- // CURRENCY / LANGUAGE / USER MENU -->
 		<!-- SITE LOGO -->

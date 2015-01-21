@@ -1,0 +1,76 @@
+{% extends 'oscar/catalogue/partials/product.html' %}
+{% load reviews_tags %}
+{% load thumbnail %}
+{% load i18n %}
+{% load display_tags %}
+{% load staticfiles %}
+
+{% block product %}
+<div class="product" data-product-id="{{ product.pk }}">
+  <div class="entry-media">
+    {% block product_image %}
+        {% with image=product.primary_image %}
+            {% thumbnail image.original "450x600" upscale=True as thumb %}
+            <img data-src="{{ thumb.url }}" alt="{{ product.get_title }}" class="lazyOwl thumb" />
+            {% endthumbnail %}
+        {% endwith %}
+    {% endblock %}
+
+	<div class="hover">
+	  <a href="{{ product.get_absolute_url }}" class="entry-url"></a>
+	  <ul class="icons unstyled">
+		<li>
+		  <div class="circle ribbon ribbon-sale">Sale</div>
+		</li>
+		<li>
+		  <a href="#" class="circle" data-toggle="lightbox"><i class="iconfont-search"></i></a>
+		</li>
+        {% if not product.is_parent %}
+        {% include "catalogue/partials/add_to_basket_form_compact.html" %}
+        {% endif %}
+	  </ul>
+	  <div class="rate-bar">
+		<input type="range" value="{{ product.rating|default:0 }}" step="0.5" id="backing{{ product.pk }}" />
+		<div class="rateit" data-rateit-backingfld="#backing{{ product.pk }}" data-rateit-starwidth="12"
+             data-rateit-starheight="12" data-rateit-resetable="false"
+             data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5"></div>
+	  </div>
+	</div>
+  </div>
+  <div class="entry-main">
+    {% block product_title %}
+	<h5 class="entry-title">
+	  <a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">{{ product.get_title|truncatewords:4 }}</a>
+	</h5>
+    {% endblock %}
+    {% block product_price %}
+	<div class="entry-price">
+	  <s class="entry-discount">$ 350.00</s>
+	  <strong class="accent-color price">$ 250.00</strong>
+      {% include "catalogue/partials/stock_record.html" %}
+      {% if not product.is_parent %}
+      {% include "catalogue/partials/add_to_basket_form_compact.html" %}
+      {% endif %}
+	</div>
+    {% endblock %}
+	<div class="entry-links clearfix">
+	  <a href="#" class="pull-left m-r">+ Add to Wishlist</a>
+	  <a href="#" class="pull-right">+ Add to Compare</a>
+	</div>
+  </div>
+</div>
+{% endblock %}
+    <article class="product_pod">
+        {% block product_review %}
+            {% iffeature "reviews" %}
+                <p class="star-rating {{ product.rating|as_stars }}">
+                    <i class="icon-star"></i>
+                    <i class="icon-star"></i>
+                    <i class="icon-star"></i>
+                    <i class="icon-star"></i>
+                    <i class="icon-star"></i>
+                </p>
+            {% endiffeature %}
+        {% endblock %}
+
+    </article>
