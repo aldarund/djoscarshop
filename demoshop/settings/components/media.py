@@ -6,8 +6,8 @@
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
-STATIC_ROOT = BASE_DIR + '/www/static'
-MEDIA_ROOT = BASE_DIR + '/media'
+STATIC_ROOT = location('www/static')
+MEDIA_ROOT = location('media')
 
 STATICFILES_DIRS = (
     location('static'),

@@ -145,18 +145,13 @@
 		</div>
 		<div class="m-t-lg">
 		  <ul class="nav nav-tabs">
-			<li class="active"><a href="#product-description" data-toggle="tab">Description</a></li>
+			<li class="active"><a href="#product-description" data-toggle="tab">{% trans 'Product Description' %}</a></li>
 			<li><a href="#product-reviews" data-toggle="tab">Reviews</a></li>
 			<li><a href="#product-shipping" data-toggle="tab">Shipping</a></li>
 		  </ul>
 		  <div class="tab-content">
 			<div class="tab-pane fade in active" id="product-description">
-			  <p>Ultricies et consectetur rhoncus lorem mattis, ligula interdum nibh dolor ipsum, venenatis ultrices sem nisl senectus phasellus lectus facilisis gravida curabitur interdum pretium et pellentesque nullam auctor vestibulum aenean ipsum placerat erat volutpat lectus mi est lacinia sociosqu, pretium habitasse aenean eros tristique augue a vivamus ac, sapien blandit nullam et neque curabitur varius nostra dui dictum cras orci congue.</p>
-			  <ul>
-				<li>Sed ornare cras donec litora </li>
-				<li>Integer curabitur orci </li>
-				<li>At nullam aliquam libero nam himenaeos </li>
-			  </ul>
+              {{ product.description|safe }}
 			</div>
 			<div class="tab-pane fade in" id="product-reviews">
 			  <div class="comments-list">

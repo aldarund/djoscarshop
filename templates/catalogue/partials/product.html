@@ -29,12 +29,17 @@
         {% include "catalogue/partials/add_to_basket_form_compact.html" %}
         {% endif %}
 	  </ul>
+
+      {% block product_review %}
+      {% iffeature "reviews" %}
 	  <div class="rate-bar">
 		<input type="range" value="{{ product.rating|default:0 }}" step="0.5" id="backing{{ product.pk }}" />
 		<div class="rateit" data-rateit-backingfld="#backing{{ product.pk }}" data-rateit-starwidth="12"
              data-rateit-starheight="12" data-rateit-resetable="false"
              data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5"></div>
 	  </div>
+      {% endiffeature %}
+      {% endblock %}
 	</div>
   </div>
   <div class="entry-main">
@@ -45,32 +50,13 @@
     {% endblock %}
     {% block product_price %}
 	<div class="entry-price">
-	  <s class="entry-discount">$ 350.00</s>
-	  <strong class="accent-color price">$ 250.00</strong>
       {% include "catalogue/partials/stock_record.html" %}
-      {% if not product.is_parent %}
-      {% include "catalogue/partials/add_to_basket_form_compact.html" %}
-      {% endif %}
 	</div>
-    {% endblock %}
 	<div class="entry-links clearfix">
 	  <a href="#" class="pull-left m-r">+ Add to Wishlist</a>
 	  <a href="#" class="pull-right">+ Add to Compare</a>
 	</div>
+    {% endblock %}
   </div>
 </div>
 {% endblock %}
-    <article class="product_pod">
-        {% block product_review %}
-            {% iffeature "reviews" %}
-                <p class="star-rating {{ product.rating|as_stars }}">
-                    <i class="icon-star"></i>
-                    <i class="icon-star"></i>
-                    <i class="icon-star"></i>
-                    <i class="icon-star"></i>
-                    <i class="icon-star"></i>
-                </p>
-            {% endiffeature %}
-        {% endblock %}
-
-    </article>
