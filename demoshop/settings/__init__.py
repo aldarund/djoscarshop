@@ -21,6 +21,7 @@ def export_to(space=None):
         'components/db.py',
         'components/apps.py',
         'components/logging.py',
+        'components/oscar.py',
 
         optional('local_settings.py'),
 
