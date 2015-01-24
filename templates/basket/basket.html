@@ -1,0 +1,38 @@
+{% extends "oscar/basket/basket.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<!-- BREADCRUMB -->
+<div class="breadcrumb-container">
+  <div class="container">
+	<div class="relative">
+	  <ul class="bc unstyled clearfix">
+		<li><a href="{{ homepage_url }}">{% trans "Home" %}</a></li>
+		<li class="active">{% trans "Basket" %}</li>
+	  </ul>
+	</div>
+  </div>
+</div>
+<!-- // BREADCRUMB -->
+{% endblock %}
+
+{% block extrascripts %}
+{{ block.super }}
+<!-- Particular Page Javascripts -->
+<script src="{% static 'oscar/js/products.js' %}"></script>
+<script src="{% static 'oscar/js/owl.carousel.js' %}"></script>
+<!-- // Particular Page Javascripts -->
+{% endblock %}
+
+{% block body_class %}products-view{% endblock %}
+
+{% block extrastyles %}
+{{ block.super }}
+<!-- PARTICULAR PAGES CSS FILES -->
+<link rel="stylesheet" href="{% static 'oscar/css/innerpage.css' %}">
+<link rel="stylesheet" href="{% static 'oscar/css/owl.carousel.css' %}">
+<link rel="stylesheet" href="{% static 'oscar/css/owl.theme.css' %}">
+<!-- // PARTICULAR PAGES CSS FILES -->
+{% endblock %}

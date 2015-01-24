@@ -3,10 +3,6 @@
 {% load i18n %}
 {% load staticfiles %}
 
-<!-- SITE HEADER -->
-<header id="site-header" role="banner">
-  <!-- MAIN HEADER -->
-  <div class="main-header-wrapper">
 	<div class="container">
 	  <div class="main-header">
 		<!-- CURRENCY / LANGUAGE / USER MENU -->
@@ -53,12 +49,9 @@
 
 		</div>
 		<!-- // CURRENCY / LANGUAGE / USER MENU -->
-		<!-- SITE LOGO -->
-		<div class="logo-wrapper">
-		  <a href="./" class="logo" title="Shop">
-			<img src="{% static 'oscar/img/logo.png' %}" alt="GFashion - Responsive e-commerce HTML Template" />
-		  </a>
-		</div>
+
+        <!-- SITE LOGO -->
+        {% include "partials/brand.html" %}
 		<!-- // SITE LOGO -->
 
 		<!-- SITE NAVIGATION MENU -->
@@ -153,7 +146,3 @@
 		<!-- // SITE NAVIGATION MENU -->
 	  </div>
 	</div>
-  </div>
-  <!-- // MAIN HEADER -->
-</header>
-<!-- // SITE HEADER -->

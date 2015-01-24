@@ -6,50 +6,50 @@
 	<!-- PAGE WRAPPER -->
 	<div id="page-wrapper">
 
-    {# Top-horizontal bar with account, notifictions, dashboard links #}
-    {% include "partials/nav_primary.html" %}
-
-    {# Site logo/title, mini-basket, browse dropdown and searchbox #}
-    {% block navigation %}
-    {% include "partials/nav_accounts.html" %}
-    {% endblock %}
-    <!-- <header class="header container-fluid"> -->
-    <!--     <div class="page_inner"> -->
-    <!--         <div class="row-fluid"> -->
-    <!--             {% include "partials/brand.html" %} -->
-    <!--             {# Mini-basket wrapped in a block so some templates can now display it #} -->
-    <!--             {% block mini_basket %}{% include "partials/mini_basket.html" %}{% endblock %} -->
-    <!--         </div> -->
-    <!--     </div> -->
-    <!-- </header> -->
+	  <header id="site-header" role="banner">
+	    <!-- HEADER TOP -->
+	    <div class="header-top">
+          {# Contacts, mini-basket, browse dropdown and searchbox #}
+          {% include "partials/nav_primary.html" %}
+        </div>
+		<!-- // HEADER TOP -->
+        {% block navigation %}
+		<!-- MAIN HEADER -->
+		<div class="main-header-wrapper">
+          {# Top-horizontal bar with site logo/title, account, notifictions, dashboard links #}
+          {% include "partials/nav_accounts.html" %}
+        </div>
+        {% endblock %}
+    </header>
 
     {# Main content of page - other layout templates may override this block #}
     {% block content_wrapper %}
-        <div class="container-fluid page">
-            <div class="page_inner">
-                {% block breadcrumbs %}{% endblock %}
-                {% block header %}
-                    <div class="page-header action">
-                        <h1>{% block headertext %}{% endblock %}</h1>
-                    </div>
-                {% endblock %}
-                {% include "partials/alert_messages.html" %}
-                {% block subnavigation %}{% endblock %}
-                <div class="content">
-                    {% block subheader %}{% endblock subheader %}
+      {% block header %}
+      <!-- {% block headertext %}{% endblock %} -->
+      {% endblock %}
 
-                    {# Render promotions #}
-                    <div id="promotions">
-                        {% for promotion in promotions_page %}
-                            {% render_promotion promotion %}
-                        {% endfor %}
-                    </div>
+      {% block breadcrumbs %}{% endblock %}
+      <main id="main-content" role="main">
+        {# Render promotions #}
+		<section class="section promos">
+          {% for promotion in promotions_main %}
+          {% render_promotion promotion %}
+          {% endfor %}
+        </section>
 
-                    {# Div exists for AJAX updates to entire content section #}
-                    <div id="content_inner">{% block content %}{% endblock %}</div>
-                </div>
+        <div class="container">
+          <div class="row">
+            {% include "partials/alert_messages.html" %}
+            {% block subnavigation %}{% endblock %}
+            <div class="m-t-b clearfix">
+            {% block subheader %}{% endblock subheader %}
+
+            {# Div exists for AJAX updates to entire content section #}
+            <div id="content_inner">{% block content %}{% endblock %}</div>
             </div>
+          </div>
         </div>
+      </main>
     {% endblock %}
 
     {% include "partials/footer.html" %}

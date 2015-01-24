@@ -2,8 +2,6 @@
 {% load i18n %}
 {% load staticfiles %}
 
-<!-- HEADER TOP -->
-<div class="header-top">
   <div class="container">
 	<div class="row">
 	  <div class="col-xs-12 col-sm-6 col-md-7">
@@ -38,28 +36,8 @@
 			<!-- // SOCIAL ICONS -->
 		  </li>
 		  <li data-toggle="sub-header" data-target="#sub-cart">
-			<!-- SHOPPING CART -->
-			<a href="javascript:void(0);" id="total-cart">
-			  <i class="iconfont-shopping-cart round-icon"></i>
-			</a>
-
-			<div id="sub-cart" class="sub-header">
-			  <header class="cart-header">
-				<span>Your cart is currently empty.</span>
-				<small><a href="./cart.html">(See All)</a></small>
-			  </header>
-			  <ul class="cart-items product-medialist unstyled clearfix"></ul>
-			  <footer class="cart-footer">
-				<div class="cart-total clearfix">
-				  <span class="pull-left uppercase">Total</span>
-				  <span class="pull-right total">$ 0</span>
-				</div>
-				<div class="text-right">
-				  <a href="{% url 'basket:summary' %}" class="btn btn-default btn-round view-cart">{% trans 'View basket' %}</a>
-				</div>
-			  </footer>
-			</div>
-			<!-- // SHOPPING CART -->
+            {# Mini-basket wrapped in a block so some templates can now display it #}
+            {% block mini_basket %}{% include "partials/mini_basket.html" %}{% endblock %}
 		  </li>
 		</ul>
 	  </div>
@@ -71,5 +49,3 @@
 	<ul class="unstyled"></ul>
   </div>
   <!-- // ADD TO CART MESSAGE -->
-</div>
-<!-- // HEADER TOP -->
