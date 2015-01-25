@@ -6,7 +6,11 @@
 {% load staticfiles %}
 
 {% block product %}
-<div class="product" data-product-id="{{ product.pk }}">
+<div class="product" data-product-id="{{ product.pk }}"
+     data-category="women|women-jeans|women-skirt"
+     data-brand="brand1" data-price="250"
+     data-colors="red|blue|black|white"
+     data-size="S|M|L">
   <div class="entry-media">
     {% block product_image %}
         {% with image=product.primary_image %}
