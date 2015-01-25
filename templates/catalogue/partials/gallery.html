@@ -7,7 +7,7 @@
 <div class="product-preview">
   {% with big_image=product.primary_image %}
   <div class="big-image">
-    {% thumbnail big_image.original "450x600" upsacle=False as thumb %}
+    {% thumbnail big_image.original "450x600" crop='center' upscale=True as thumb %}
 	<a href="{{ thumb.url }}" data-toggle="lightbox">
 	  <img src="{{ thumb.url }}" alt="{{ product.get_title }}" />
 	</a>

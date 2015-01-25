@@ -14,7 +14,7 @@
   <div class="entry-media">
     {% block product_image %}
         {% with image=product.primary_image %}
-            {% thumbnail image.original "450x600" upscale=True as thumb %}
+            {% thumbnail image.original "450x600" crop='center' upscale=True as thumb %}
             <img data-src="{{ thumb.url }}" alt="{{ product.get_title }}" class="lazyOwl thumb" />
             {% endthumbnail %}
         {% endwith %}
