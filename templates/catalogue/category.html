@@ -1,6 +1,10 @@
-{% extends "oscar/catalogue/category.html" %}
+{% extends "catalogue/browse.html" %}
 
 {% load i18n %}
+
+{% block title %}
+    {{ category.name }} | {{ block.super }}
+{% endblock %}
 
 {% block description %}
     {{ category.description|default:""|striptags }}
