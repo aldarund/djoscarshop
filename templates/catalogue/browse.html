@@ -46,44 +46,34 @@
 			  <!-- CATEGORIES -->
 			  <section class="side-section bg-white">
 				<header class="side-section-header">
-				  <h3 class="side-section-title">Categories</h3>
+				  <h3 class="side-section-title">{% trans 'Categories' %}</h3>
 				</header>
 				<div class="side-section-content">
+                  {% category_tree depth=2 as tree_categories %}
+                  {% if tree_categories %}
 				  <ul id="category-list" class="vmenu unstyled">
+                  {% for tree_category, info in tree_categories %}
+                  {% if info.has_children %}
 					<li>
-					  <input type="checkbox" id="check-women" class="prettyCheckable" data-label="Women" data-labelPosition="right" value="women" />
+					  <input type="checkbox" id="check-women" class="prettyCheckable" data-label="{{ tree_category.name }}" data-labelPosition="right" value="women" />
 					  <ul>
-						<li><input type="checkbox" id="check-women-accessories" class="prettyCheckable" data-label="Accessories" data-labelPosition="right" value="women-accessories" /></li>
-						<li><input type="checkbox" id="check-women-swimwear" class="prettyCheckable" data-label="Swimwear" data-labelPosition="right" value="women-swimwear" /></li>
-						<li><input type="checkbox" id="check-women-basics" class="prettyCheckable" data-label="Basics" data-labelPosition="right" value="women-basics" /></li>
-						<li><input type="checkbox" id="check-women-dresses" class="prettyCheckable" data-label="Dresses" data-labelPosition="right" value="women-dresses" /></li>
-						<li><input type="checkbox" id="check-women-jeans" class="prettyCheckable" data-label="Jeans" data-labelPosition="right" value="women-jeans" /></li>
-						<li><input type="checkbox" id="check-women-skirt" class="prettyCheckable" data-label="Skirts" data-labelPosition="right" value="women-skirt" /></li>
-						<li><input type="checkbox" id="check-women-legging" class="prettyCheckable" data-label="Leggings" data-labelPosition="right" value="women-legging" /></li>
+                  {% else %}
+						<li><input type="checkbox" id="check-women-accessories" class="prettyCheckable" data-label="{{ tree_category.name }}" data-labelPosition="right" value="women-accessories" /></li>
+                  {% endif %}
+                  {% for close in info.num_to_close %}
 					  </ul>
 					</li>
+                  {% endfor %}
+
+                  {% endfor %}
+
+                    {% for promotion in promotions_page %}
 					<li>
-					  <input type="checkbox" id="check-men" class="prettyCheckable" data-label="Men" data-labelPosition="right" value="men" />
-					  <ul>
-						<li><input type="checkbox" id="check-men-accessories" class="prettyCheckable" data-label="Accessories" data-labelPosition="right" value="men-accessories" /></li>
-						<li><input type="checkbox" id="check-men-jacket" class="prettyCheckable" data-label="Jackets" data-labelPosition="right" value="men-jacket" /></li>
-						<li><input type="checkbox" id="check-men-jumper" class="prettyCheckable" data-label="Jumpers" data-labelPosition="right" value="men-jumper" /></li>
-						<li><input type="checkbox" id="check-men-jean" class="prettyCheckable" data-label="Jeans" data-labelPosition="right" value="men-jean" /></li>
-						<li><input type="checkbox" id="check-men-shoe" class="prettyCheckable" data-label="Shoes" data-labelPosition="right" value="men-shoe" /></li>
-						<li><input type="checkbox" id="check-men-tshirt" class="prettyCheckable" data-label="T-Shirt & Polo Shirts" data-labelPosition="right" value="men-tshirt" /></li>
-						<li><input type="checkbox" id="check-men-blazers" class="prettyCheckable" data-label="Blazers" data-labelPosition="right" value="men-blazers" /></li>
-					  </ul>
+					  <input type="checkbox" id="check-best" class="prettyCheckable" data-label="{{ promotion.name }}" data-labelPosition="right" value="best" />
 					</li>
-					<li>
-					  <input type="checkbox" id="check-beauty" class="prettyCheckable" data-label="Beauty & Make-up" data-labelPosition="right" value="makeup" />
-					</li>
-					<li>
-					  <input type="checkbox" id="check-best" class="prettyCheckable" data-label="Best Sellers" data-labelPosition="right" value="best" />
-					</li>
-					<li>
-					  <input type="checkbox" id="check-new" class="prettyCheckable" data-label="New Arrivals" data-labelPosition="right" value="new" />
-					</li>
+                    {% endfor %}
 				  </ul>
+                  {% endif %}
 				</div>
 				<footer class="side-section-footer text-center hide">
 				  <button type="button" id="btn-filter-cat" class="btn btn-primary btn-round uppercase">Clear Filters</button>
@@ -266,37 +256,16 @@
 			</section>
 </aside>
 
-    <!-- {% category_tree as tree_categories %} -->
-    <!-- {% if tree_categories %} -->
-    <!--     <h4>{% trans "Show results for" %}</h4> -->
-    <!--     <div class="side_categories"> -->
-    <!--         <ul class="nav nav-list"> -->
-    <!--             {% for tree_category, info in tree_categories %} -->
-    <!--                 <li> -->
-    <!--                 {% if tree_category.pk == category.pk %} -->
-    <!--                     <strong>{{ tree_category.name }}</strong> -->
-    <!--                 {% else %} -->
-    <!--                     <a href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a> -->
-    <!--                 {% endif %} -->
-
-    <!--                 {% if info.has_children %}<ul>{% else %}</li>{% endif %} -->
-    <!--                 {% for n in info.num_to_close %} -->
-    <!--                     </ul></li> -->
-    <!--                 {% endfor %} -->
-    <!--             {% endfor %} -->
-    <!--         </ul> -->
-    <!--     </div> -->
-    <!-- {% endif %} -->
-    <!-- {% if has_facets %} -->
-    <!--     <h4>{% trans "Refine by" %}</h4> -->
-    <!--     <div class="side_categories"> -->
-    <!--         {% for field, data in facet_data.items %} -->
-    <!--             {% if data.results %} -->
-    <!--                 {% include 'search/partials/facet.html' with name=data.name items=data.results %} -->
-    <!--             {% endif %} -->
-    <!--         {% endfor %} -->
-    <!--     </div> -->
-    <!-- {% endif %} -->
+    {% if has_facets %}
+        <h4>{% trans "Refine by" %}</h4>
+        <div class="side_categories">
+            {% for field, data in facet_data.items %}
+                {% if data.results %}
+                    {% include 'search/partials/facet.html' with name=data.name items=data.results %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block content %}

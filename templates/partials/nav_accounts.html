@@ -1,7 +1,9 @@
 {% load currency_filters %}
 {% load category_tags %}
 {% load i18n %}
+{% load thumbnail %}
 {% load staticfiles %}
+{% load flatpages %}
 
 	<div class="container">
 	  <div class="main-header">
@@ -81,37 +83,41 @@
 				  </div>
                   {% endfor %}
 
+                  {% if promotions_catalogue %}
+                  {% with promotion=promotions_catalogue.0 %}
 				  <div class="col-md-3">
 					<div class="carousel slide m-b" data-ride="carousel">
 					  <div class="carousel-inner">
-						<div class="item active">
-						  <img src="{% static 'oscar/img/dummy/450x600.png' %}" alt="" />
+                        {% for product in promotion.products.all %}
+						<div class="item{% if forloop.first %} active{% endif %}">
+                          {% with image=product.primary_image %}
+                          {% thumbnail image.original '450x600' crop='center' upscale=True as thumb %}
+						  <img src="{{ thumb.url }}" alt="{{ product.get_title }}" />
+                          {% endthumbnail %}
+                          {% endwith %}
 						</div>
-						<div class="item">
-						  <img src="{% static 'oscar/img/dummy/450x600.png' %}" alt="" />
-						</div>
+                        {% endfor %}
 					  </div>
 					</div>
-					<h5 class="text-semibold uppercase m-b-sm">Featured Products</h5>
-					<p>Lorem ipsum dolor sit, consectetur adipiscing elit. Etiam neque velit, blandit sed scelerisque.</p>
-					<a href="products.html" class="btn btn-default btn-round">Go to Shop ?</a>
+					<h5 class="text-semibold uppercase m-b-sm">{{ promotion.name }}</h5>
+					<p>{{ promotion.description|safe }}</p>
+					<a href="{% url 'catalogue:index' %}" class="btn btn-default btn-round">Go to Shop ?</a>
 				  </div>
-
+                  {% endwith %}
+                  {% endif %}
 				</div>
 			  </div>
 			  <!-- // MEGA MENU -->
 
 			</li>
             {% endfor %}
+
+            {% get_flatpages '/nav/' as nav_menu_pages %}
+            {% for page in nav_menu_pages %}
 			<li>
-			  <a href="components.html">Components</a>
+			  <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
 			</li>
-			<li>
-			  <a href="store-locator.html">Store Locator</a>
-			</li>
-			<li>
-			  <a href="contact-us.html">Contact Us</a>
-			</li>
+            {% endfor %}
 		  </ul>
 
 		  <!-- MOBILE MENU -->

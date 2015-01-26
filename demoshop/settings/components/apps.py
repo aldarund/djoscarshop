@@ -9,5 +9,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.flatpages',
+    'django.contrib.sitemaps',
     'compressor',
 ) + tuple(oscar.get_core_apps())
