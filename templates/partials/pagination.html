@@ -10,13 +10,11 @@
            data-toggle="tooltip" data-title="{% trans "previous" %}"><i class="iconfont-angle-left"></i></a></li>
     {% endif %}
 
-    <!-- {% blocktrans with page_num=page_obj.number total_pages=paginator.num_pages %} -->
-    <!-- Page {{ page_num }} of {{ total_pages }} -->
-    <!-- {% endblocktrans %} -->
-
     {% for num in page_obj|ellipses_page_range %}
-        {% if num %}
+        {% if num and num != page_obj.number %}
         <li><a href="?{% get_parameters page %}page={{ num }}">{{ num }}</a></li>
+        {% elif num and num == page_obj.number %}
+        {{ num }}
         {% else %}
         ...
         {% endif %}
