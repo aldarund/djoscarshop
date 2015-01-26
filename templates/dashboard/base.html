@@ -1,1 +1,7 @@
-{% extends "oscar/dashboard/base.html" %}
+{% extends "oscar/base.html" %}
+
+{% block extrahead %}
+    {{ block.super }}
+
+    <meta name="robots" content="NONE,NOARCHIVE">
+{% endblock %}
