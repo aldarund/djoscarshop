@@ -3,10 +3,52 @@
  * UR: http://themina.net
  *
  * This file manages Add to Cart functionality
- * By clicking `add to cart` button, the product will be added to cookie `cart`
+ * By clicking `add to cart` button, the product will be added to storage `cart`
  * With a nice animation.
  */
 jQuery(function($) {
+
+    function MemStorage () {}
+    MemStorage.prototype = {
+        get: function () {
+            return this.storage;
+	    },
+
+	    set: function (storage) {
+            this.storage = storage;
+	    },
+
+        clear: function () {
+            delete this.storage;
+        }
+    };
+
+    function CookieStorage (storage_name) {
+        self.storage_name = ( typeof storage_name == 'undefined' ) ? 'cart' : storage_name;
+    }
+    CookieStorage.prototype = {
+        get: function () {
+            var storage = $.cookie(this.storage_name);
+            if ( typeof storage == 'undefined' )
+                return storage;
+            else
+		        return this.toJSON(storage);
+	    },
+
+	    set: function (cookie) {
+		    $.cookie(this.storage_name, JSON.stringify(cookie));
+	    },
+
+	    toJSON: function (cookie) {
+		    return $.parseJSON(cookie);
+	    },
+
+        clear: function () {
+            $.removeCookie(this.storage_name);
+        }
+    };
+
+    var cart_storage = new MemStorage();
 
 	$(document).on('click', '.add-to-cart', function(e) {
 		e.preventDefault();
@@ -63,7 +105,7 @@ jQuery(function($) {
 					});
 				});
 
-		updateCookie(data);
+		updateStorage(data);
         addCartAJAX($this.parent(), data);
 	});
 
@@ -73,69 +115,51 @@ jQuery(function($) {
 			$item = $this.closest('.item'),
 			id = $item.data('product-id');
 
-		cookie = getCookie();
-		cookie = toJSON(cookie);
+		storage = cart_storage.get();
 
-		for ( var x in cookie )
+		for ( var x in storage )
 		{
-			if ( cookie[x].id == id )
+			if ( storage[x].id == id )
 			{
-				cookie.splice(x,1);
+				storage.splice(x,1);
 			}
 		}
 
-		setCookie(cookie);
+		cart_storage.set(storage);
 		$item.parent().fadeOut(400, function() {
 			updateCart();
 		});
 	});
 
-	function getCookie()
+	function updateStorage(data)
 	{
-		return $.cookie('cart');
-	}
-
-	function setCookie(cookie)
-	{
-		$.cookie('cart', JSON.stringify(cookie) );
-	}
-
-	function toJSON(cookie)
-	{
-		return $.parseJSON(cookie);
-	}
-
-	function updateCookie(data)
-	{
-		var cookie = getCookie();
-		if ( typeof cookie == 'undefined' )
+		var storage = cart_storage.get();
+		if ( typeof storage == 'undefined' )
 		{
-			cookie = [];
-			cookie.push(data);
+			storage = [];
+			storage.push(data);
 		}
 		else
 		{
-			cookie = toJSON(cookie);
-
-			for ( var x in cookie )
+			for ( var x in storage )
 			{
-				if ( cookie[x].id == data.id )
+				if ( storage[x].id == data.id )
 				{
-					cookie[x].qty++;
-					setCookie(cookie);
+					storage[x].qty++;
+					cart_storage.set(storage);
 					return;
 				}
 			}
 
-			cookie.push(data);
+			storage.push(data);
 		}
 
-		setCookie(cookie);
+		cart_storage.set(storage);
 	}
 
 	function updateCart()
 	{
-		var cookie = getCookie();
+		var storage = cart_storage.get();
 		var $cartPop = $('#sub-cart'),
 			$cartItems = $cartPop.find('.cart-items'),
 			$cartHeader = $cartPop.find('.cart-header'),
@@ -145,7 +169,7 @@ jQuery(function($) {
 		$cartItems.empty();
 		$cartHeader.find('small').hide();
 
-		if ( typeof cookie == 'undefined' )
+		if ( typeof storage == 'undefined' )
 		{
 			$cartHeader.find('span').text('Your cart is currently empty.');
 			$cartTotal.text('0');
@@ -154,25 +178,24 @@ jQuery(function($) {
 		else
 		{
 			var total = 0, counter = 0, temp, max = 2;
-			cookie = toJSON(cookie);
-			for ( var x in cookie )
+			for ( var x in storage )
 			{
-				temp = cookie[x].price;
+				temp = storage[x].price;
 				temp = temp.replace( /^\D+/g, '');
 				temp = parseInt(temp);
 				if ( ! isNaN(temp) )
 				{
-					total += cookie[x].qty * temp;
+					total += storage[x].qty * temp;
 				}
 				if ( ++counter > max ) continue;
 				var $new = $('<li> \
-								<div class="item clearfix" data-product-id="' + cookie[x].id + '"> \
+								<div class="item clearfix" data-product-id="' + storage[x].id + '"> \
 									<button type="button" class="close" aria-hidden="true">×</button> \
-									<a href="' + cookie[x].thumbnail + '" data-toggle="lightbox" class="entry-thumbnail"> \
-										<img src="' + cookie[x].thumbnail+ '" alt="' + cookie[x].title + '" /> \
+									<a href="' + storage[x].thumbnail + '" data-toggle="lightbox" class="entry-thumbnail"> \
+										<img src="' + storage[x].thumbnail+ '" alt="' + storage[x].title + '" /> \
 									</a> \
-									<h5 class="entry-title"><a href="' + cookie[x].url + '">' + cookie[x].title + '</a></h5> \
-									<span class="entry-price">' + cookie[x].qty + ' x ' + cookie[x].price + '</span> \
+									<h5 class="entry-title"><a href="' + storage[x].url + '">' + storage[x].title + '</a></h5> \
+									<span class="entry-price">' + storage[x].qty + ' x ' + storage[x].price + '</span> \
 								</div> \
 							</li>');
 
@@ -193,7 +216,7 @@ jQuery(function($) {
 
 			if ( counter == 0 )
 			{
-				$.removeCookie('cart');
+                cart_storage.clear();
 				updateCart();
 				return;
 			}

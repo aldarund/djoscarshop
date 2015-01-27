@@ -1,5 +1,5 @@
 jQuery(function($) {
-	
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Shopping cart - Remove Row on click Close button
@@ -9,16 +9,16 @@ jQuery(function($) {
 		$(this).closest('tr').fadeOut(500, function() {
 			$(this).remove();
 			update_cart_total();
-			
+
 			if ( $('.tbl-cart tbody tr:not(.empty-cart)').length == 0 )
 			{
 				$('.tbl-cart .empty-cart').removeClass('hide');
 			}
 		});
-		
+
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Shopping cart - Fetch Cookie data and display cart items
@@ -29,14 +29,14 @@ jQuery(function($) {
 		var cookie = $.cookie('cart');
 		if ( cookie === undefined ) return;
 		cookie = $.parseJSON(cookie);
-		
-		
+
+
 		for ( var x in cookie )
 		{
 			temp = cookie[x].price;
 			temp = temp.replace( /^\D+/g, '');
 			temp = parseFloat(temp).toFixed(2);
-			
+
 			var $new = $('<tr> \
 							<td> \
 								<a class="entry-thumbnail" href="' + cookie[x].thumbnail + '" data-toggle="lightbox">\
@@ -55,18 +55,19 @@ jQuery(function($) {
 							<td class="hidden-xs"><strong class="text-bold row-total">$' + temp + '</strong></td> \
 							<td class="hidden-xs"><button type="button" class="close" aria-hidden="true">×</button></td> \
 						</tr>');
-			
+
 			$new.appendTo( $('.tbl-cart tbody') );
 			$new.find('[data-toggle="lightbox"]').magnificPopup({
 				type: 'image'
 			});
 		}
-		
+
 		update_cart_total();
 	}
-	output_cookie();
-	
-	
+    // enabled if you need a cookie storage
+	// output_cookie();
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Shopping cart - QTY
@@ -76,22 +77,22 @@ jQuery(function($) {
 		var $this = $(this),
 			$input = $this.siblings('input'),
 			val = parseInt($input.val());
-		
+
 		val = ( $this.hasClass('up') ) ? ++val : --val;
 		if ( isNaN(val) || val < 0 ) val = 0;
-		
+
 		$input.val(val);
-		
+
 		var $row = $this.closest('tr'),
 			unit_price = $row.find('.unit-price').text(),
 			row_total = unit_price.replace( /^\D+/g, '') * val;
-		
+
 		$row.find('.row-total').text('$' + row_total.toFixed(2));
-		
+
 		update_cart_total();
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Shopping cart - Update Total & Sub Total
@@ -101,34 +102,34 @@ jQuery(function($) {
 	{
 		var total = 0,
 			subtotal = 0;
-			
+
 		$('.tbl-cart .row-total').each(function() {
 			temp = $(this).text();
 			temp = temp.replace( /^\D+/g, '');
 			temp = parseFloat(temp);
-			
+
 			if ( ! isNaN(temp) )
 			{
 				total += temp;
 			}
 		});
-			
+
 		$('.tbl-cart .unit-price').each(function() {
 			temp = $(this).text();
 			temp = temp.replace( /^\D+/g, '');
 			temp = parseFloat(temp);
-			
+
 			if ( ! isNaN(temp) )
 			{
 				subtotal += temp;
 			}
 		});
-		
+
 		$('.shopcart-total .cart-subtotal > .pull-right').text('$' + subtotal.toFixed(2));
 		$('.shopcart-total .cart-total > .pull-right').text('$' + total.toFixed(2));
 	}
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Product Single Page - Change Product Preview Image
@@ -140,37 +141,37 @@ jQuery(function($) {
 		$preview.find('a').attr( 'href', $(this).attr('href') );
 		$preview.find('img').attr( 'src', $(this).children().attr('src') );
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Setup Product Grid Layout
 	| ----------------------------------------------------------------------------------
 	*/
 	var $product_layout = $('.products-layout');
-	
+
 	function setupProduct() {
 		var itemW = 270,
 			productW = $product_layout.width();
-		
+
 		x = parseInt(productW / itemW);
 		var new_itemW = parseInt(productW / x).toString() + 'px';
-		if ( x == 1 ) 
+		if ( x == 1 )
 		{
 			new_itemW = '100%';
 		}
 		$product_layout.find('.product').each(function() {
 			var $this = $(this), added_classes = '';
-			
+
 			$this = ( ! $this.parent().hasClass('mix-item') ) ? $this.wrap('<div class="mix-item ' + added_classes + '" />').parent() : $this.parent();
 			$this.children().css('visibility', 'visible');
-			
+
 			var $lazyLoad = $this.find('.lazyLoad');
 			if ( $lazyLoad.length )
 			{
 				$this.addClass('loading');
 			}
-			
+
 			$this.css({
 				'width': new_itemW
 			});
@@ -178,29 +179,29 @@ jQuery(function($) {
 				opacity: 1,
 				visibility: 'visible'
 			}, 800, 'easeInQuad');
-			
+
 			$lazyLoad.attr( 'src', $lazyLoad.data('src') ).imagesLoaded(function() {
 				$lazyLoad.removeAttr('data-src');
 				$this.removeClass('loading');
 			});
 		});
 	}
-	
+
 	if ( $product_layout.length )
 	{
 		setupProduct();
-		
+
 		$product_layout.imagesLoaded(function() {
 			$product_layout.isotope({
 				itemSelector: '.mix-item'
 			});
 		});
-		
+
 		$(window).smartresize(function() {
 			setupProduct();
 		});
 	}
-	
+
 
 	$('[data-layout="list"], [data-layout="grid"]').on('click', function(e) {
 		e.preventDefault();
@@ -208,8 +209,8 @@ jQuery(function($) {
 		$(this).closest('ul').find('.active').removeClass('active');
 		$(this).addClass('active');
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Isotope Filter - Filter by Category and Brands
@@ -219,7 +220,7 @@ jQuery(function($) {
 	filterCheckbox( $('#brands-list'), 'brand' );
 	filterCheckbox( $('#filter-by-color'), 'colors' );
 	filterCheckbox( $('#filter-by-size'), 'size' );
-	
+
 	function filterCheckbox($container, type)
 	{
 		$container.find('input[type="checkbox"]').on('change', function() {
@@ -231,14 +232,14 @@ jQuery(function($) {
 					filters.push(this_filter);
 				}
 			});
-			
-			
+
+
 			var products = $product_layout.find('.mix-item').filter(function() {
 				if ( filters.length == 0 ) return true;
 				var $this = $(this),
 					filter = $this.find(' > .product').data(type),
 					filter_arr;
-				
+
 				if ( filter !== undefined )
 				{
 					filter_arr = filter.split('|');
@@ -249,14 +250,14 @@ jQuery(function($) {
 					return false;
 				}
 			});
-			
+
 			$product_layout.isotope({
 				filter: products
 			});
 		});
 	}
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Isotope Filter - Filter by Price
@@ -269,13 +270,13 @@ jQuery(function($) {
 			if ( price === undefined ) return false;
 			return ( price >= value[0] && price < value[1] ) ? true : false;
 		});
-		
+
 		$product_layout.isotope({
 			filter: products
 		});
 	}
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Set input value of filters
@@ -287,8 +288,8 @@ jQuery(function($) {
 		$this.toggleClass('active');
 		$this.siblings('.filter-checkbox').prop( 'checked', $this.hasClass('active') ).trigger('change');
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Add Helper Classes to Vertical Menu
@@ -300,7 +301,7 @@ jQuery(function($) {
 			$(this).addClass('has-submenu');
 		}
 	});
-	
+
 
 	/*
 	| ----------------------------------------------------------------------------------
@@ -312,13 +313,13 @@ jQuery(function($) {
 	$('.range-slider').each(function() {
 		var $this = $(this),
 			configs = new Array();
-		
+
 		configs['min'] = ( $this.data('min') === undefined ) ? 0 : $this.data('min');
 		configs['max'] = ( $this.data('max') === undefined ) ? 100 : $this.data('max');
 		configs['start'] = ( $this.data('start') === undefined ) ? [configs['min'], configs['max']] : $this.data('start');
 		configs['step'] = ( $this.data('step') === undefined ) ? 1 : $this.data('step');
 		configs['currency'] = ( $this.data('currency') === undefined ) ? '$' : $this.data('currency');
-		
+
 		$this.noUiSlider({
 			range: [configs['min'], configs['max']],
 			start: configs['start'],
@@ -327,7 +328,7 @@ jQuery(function($) {
 			handles: 2,
 			slide: function() {
 				var values = $(this).val();
-					
+
 				$this.siblings('.range-slider-value').find('> .min').text( configs['currency'] + values[0] );
 				$this.siblings('.range-slider-value').find('> .max').text( configs['currency'] + values[1] );
 			},
@@ -337,7 +338,7 @@ jQuery(function($) {
 				mark: ","
 			},
 		}).change(function() { priceSlider( $(this).val() ); });
-		
+
 		$this.siblings('.range-slider-value').find('> .min').text( configs['currency'] + $this.val()[0] );
 		$this.siblings('.range-slider-value').find('> .max').text( configs['currency'] + $this.val()[1] );
 	});
