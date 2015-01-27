@@ -7,13 +7,13 @@
  * With a nice animation.
  */
 jQuery(function($) {
-	
+
 	$(document).on('click', '.add-to-cart', function(e) {
 		e.preventDefault();
 		var $this = $(this),
 			$container,
 			data = {};
-		
+
 		// Get Related add-cart container and settings
 		$container = $this.closest('.add-cart');
 		$item = $this.closest( $container.data('product') );
@@ -24,8 +24,8 @@ jQuery(function($) {
 			url: $item.find( $container.data('url') ).attr('href'),
 			price: $.trim( $item.find( $container.data('price') ).text() ),
 			qty: 1
-		}
-		
+		};
+
 		/* Add to Cart Animation - Credits : http://codepen.io/ElmahdiMahmoud/pen/tEeDn */
 		var $imgToDrag = $item.find( $container.data('thumbnail') ),
 			$cart = $('.header-top [data-target="#sub-cart"]'),
@@ -54,28 +54,28 @@ jQuery(function($) {
 					}, function () {
 						$(this).detach();
 					});
-					
+
 					var $notification = $('.cart-notification ul'),
 						$newNotify = $('<li><strong>"' + data.title + '"</strong> Added to Your Cart Succesfully.</li>').hide();
-					
+
 					$newNotify.appendTo($notification).slideDown(400, function() {
 						setTimeout(function() { $newNotify.slideUp(400, function() { $(this).remove(); }); }, 2000);
 					});
 				});
 
 		updateCookie(data);
-		updateCart();
+        addCartAJAX($this.parent(), data);
 	});
-	
-	
+
+
 	$(document).on('click', '#sub-cart .close', function() {
 		var $this = $(this),
 			$item = $this.closest('.item'),
 			id = $item.data('product-id');
-			
+
 		cookie = getCookie();
 		cookie = toJSON(cookie);
-		
+
 		for ( var x in cookie )
 		{
 			if ( cookie[x].id == id )
@@ -83,28 +83,28 @@ jQuery(function($) {
 				cookie.splice(x,1);
 			}
 		}
-		
+
 		setCookie(cookie);
 		$item.parent().fadeOut(400, function() {
 			updateCart();
 		});
 	});
-	
+
 	function getCookie()
 	{
 		return $.cookie('cart');
 	}
-	
+
 	function setCookie(cookie)
 	{
 		$.cookie('cart', JSON.stringify(cookie) );
 	}
-	
+
 	function toJSON(cookie)
 	{
 		return $.parseJSON(cookie);
 	}
-	
+
 	function updateCookie(data)
 	{
 		var cookie = getCookie();
@@ -116,7 +116,7 @@ jQuery(function($) {
 		else
 		{
 			cookie = toJSON(cookie);
-			
+
 			for ( var x in cookie )
 			{
 				if ( cookie[x].id == data.id )
@@ -126,13 +126,13 @@ jQuery(function($) {
 					return;
 				}
 			}
-			
+
 			cookie.push(data);
 		}
-		
+
 		setCookie(cookie);
 	}
-	
+
 	function updateCart()
 	{
 		var cookie = getCookie();
@@ -140,11 +140,11 @@ jQuery(function($) {
 			$cartItems = $cartPop.find('.cart-items'),
 			$cartHeader = $cartPop.find('.cart-header'),
 			$cartTotal = $cartPop.find('.cart-total .total');
-		
-		
+
+
 		$cartItems.empty();
 		$cartHeader.find('small').hide();
-		
+
 		if ( typeof cookie == 'undefined' )
 		{
 			$cartHeader.find('span').text('Your cart is currently empty.');
@@ -175,13 +175,13 @@ jQuery(function($) {
 									<span class="entry-price">' + cookie[x].qty + ' x ' + cookie[x].price + '</span> \
 								</div> \
 							</li>');
-				
+
 				$new.appendTo($cartItems);
 				$new.find('[data-toggle="lightbox"]').magnificPopup({
 					type: 'image'
 				});
 			}
-			
+
 			if ( max >= counter )
 			{
 				max = counter;
@@ -190,34 +190,26 @@ jQuery(function($) {
 			{
 				$cartHeader.find('small').show();
 			}
-			
+
 			if ( counter == 0 )
 			{
 				$.removeCookie('cart');
 				updateCart();
 				return;
 			}
-			
+
 			$cartHeader.find('span').text('Displaying ' + max.toString() + ' of ' + counter.toString() + ' items');
 			$cartTotal.text( '$ ' + total.toString() );
 		}
-		
+
 	}
 	updateCart();
-	
-	
-	function addCartAJAX(data)
+
+
+	function addCartAJAX(form, data)
 	{
-		$.ajax({
-			url: 'cart.php',
-			type: 'post',
-			data: 'data=' + encodeURIComponent(JSON.stringify(data)),
-			dataType: 'json',
-			beforeSend: function() {
-			},
-			sucess: function(result) {
-				updateCart(data);
-			}
-		});
+        form.ajaxSubmit(function (event) {
+			updateCart(data);
+        });
 	}
 });
