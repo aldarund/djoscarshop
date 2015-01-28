@@ -200,6 +200,9 @@ jQuery(function($) {
 							</li>');
 
 				$new.appendTo($cartItems);
+                $new.on('click', '.close', function () {
+                    alert('here');
+                });
 				$new.find('[data-toggle="lightbox"]').magnificPopup({
 					type: 'image'
 				});

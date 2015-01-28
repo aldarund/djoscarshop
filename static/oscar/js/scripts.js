@@ -1,25 +1,25 @@
 var scrnW, scrnH;
 
 jQuery(function($) {
-	
+
 	function scrnSize()
 	{
 		scrnW = $(window).width(),
 		scrnH = $(window).height();
 	}
-	
+
 	$(window).on('resize', function() {
 		scrnSize();
 	});
 	scrnSize();
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Google Map
 	| ----------------------------------------------------------------------------------
 	*/
-	if ( jQuery().gmap3 ) 
+	if ( jQuery().gmap3 )
 	{
 		$('#store-locator-gmap').gmap3({
 			marker : {
@@ -69,7 +69,7 @@ jQuery(function($) {
 				}
 			}
 		});
-	
+
 		$('#gmap').gmap3({
 			marker : {
 				latLng : [-37.817243, 144.955475],
@@ -113,8 +113,8 @@ jQuery(function($) {
 			}
 		});
 	}
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Simulate select click
@@ -125,8 +125,8 @@ jQuery(function($) {
 		if ( $(e.target).hasClass('styled-dd') )
 			$(this).find('select').simulate('mousedown');
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Simulate Smooth Height functionality for bootstrap carousel
@@ -140,8 +140,8 @@ jQuery(function($) {
 			$this.animate( { 'height': next_h }, 590 );
 		}, 10);
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| PrettyCheckable jQuery Plugin
@@ -157,7 +157,7 @@ jQuery(function($) {
 		var $this = $(this);
 		$this.parent().siblings('ul').find('.prettyCheckable').each(function() {
 			if ( $this.prop('checked') )
-			{ 
+			{
 				$(this).prettyCheckable('check');
 				$(this).parent().addClass('checked');
 			}
@@ -168,8 +168,8 @@ jQuery(function($) {
 			}
 		});
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Product LightBox - jQuery magnificPopup Plugin By dimsemenov
@@ -184,8 +184,8 @@ jQuery(function($) {
 			return ( $(window).width() < 500 ) ? false : true;
 		}
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Product Carousel - jQuery OwlCarousel Plugin
@@ -202,7 +202,7 @@ jQuery(function($) {
 				navigation: ( $this.data('navigation') == true ) ? true : false,
 				pagination: ( $this.data('pagination') == true ) ? true : false,
 			};
-		
+
 		$this.owlCarousel({
 			items: settings.items,
 			slideSpeed: settings.speed,
@@ -233,8 +233,8 @@ jQuery(function($) {
 			}
 		});
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Carousel Navigation Hover Animation Effect
@@ -245,10 +245,10 @@ jQuery(function($) {
 			var $this = $(this),
 				$clone = $this.clone(),
 				leftOrRight = ( $clone.hasClass('owl-prev') ) ? 'left' : 'right';
-			
+
 			var posLeft = $this.offset().left;
 			posLeft = ( leftOrRight == 'right' ) ? posLeft + 50 : posLeft - 50;
-			
+
 			$clone.css({
 				'position': 'absolute',
 				'left': $this.offset().left,
@@ -268,8 +268,8 @@ jQuery(function($) {
 		},
 		timeout: 150
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| animate elements when they are in viewport
@@ -278,20 +278,20 @@ jQuery(function($) {
 	$('.noIE .animated:not(.animation-done)').waypoint(function() {
 		var animation = $(this).data('animation');
 		$(this).addClass('animation-done').addClass(animation);
-	}, { 
+	}, {
 		triggerOnce: true,
-		offset: '85%' 
+		offset: '85%'
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Bootstrap tooltip plugin for every element with data-toggle="tooltip"
 	| ----------------------------------------------------------------------------------
 	*/
 	$('[data-toggle="tooltip"]').tooltip();
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Convert label as input placeholder
@@ -313,8 +313,8 @@ jQuery(function($) {
 			$(this).siblings('.placeholder').addClass('hide-label');
 		}
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Open Shopping Cart Popup on Header On mouse over Icon
@@ -323,7 +323,7 @@ jQuery(function($) {
 	$('[data-toggle="sub-header"]').each(function() {
 		var $this = $(this),
 			$target = $( $this.data('target') );
-			
+
 		$this.hoverIntent({
 			over: function() {
 				// Move Popup to Center of the viewport when screen width is low
@@ -343,14 +343,14 @@ jQuery(function($) {
 			timeout: 250
 		});
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Main menu & Mega menu
 	| ----------------------------------------------------------------------------------
 	*/
-	
+
 	// add class submenu to submenu's that are not megamenu
 	$('.main-menu ul').each(function() {
 		if ( $(this).closest('.mega-menu').length == 0 )
@@ -362,43 +362,43 @@ jQuery(function($) {
 			$(this).addClass('mega-menu-parent');
 		}
 	});
-	
+
 	// add class has-child to each menu item that has child
 	$('.main-menu li').each(function() {
-		if ( $(this).find('ul').length ) 
+		if ( $(this).find('ul').length )
 			$(this).addClass('has-child');
 	});
-	
+
 	$('.main-menu li').hoverIntent({
 		// on menu mouse hover function handler
 		over: function() {
 			var $this = $(this),
 				$mm = $this.children('.mega-menu'),
 				$parent = $('#site-menu');
-			
+
 			// we need to setup megamenu position and width
 			var $pattern_container = $parent.closest('.main-header');
-			
+
 			var lgORmd = ( scrnW >= 1170 ) ? 'col-lg' : 'col-md';
 				cols = parseInt($mm.data(lgORmd)),
 				mmW =  $pattern_container.outerWidth(),
 				mmLeft = $pattern_container.offset().left - $this.offset().left;
-			
+
 			if ( isNaN(cols) ) cols = 12;
 			mmW = parseInt(mmW * (cols/12));
-			
+
 			mmLeft += ($pattern_container.outerWidth() - mmW) / 2;
 			mmLeft = parseInt(mmLeft);
-			
-			$mm.css({ 
-				'left': mmLeft + 'px', 
-				'width': mmW + 'px', 
+
+			$mm.css({
+				'left': mmLeft + 'px',
+				'width': mmW + 'px',
 				'visibility': 'visible'
 			});
-			
+
 			// now we are good and we can show the megamenu
 			$this.addClass('hover').children('ul, .mega-menu').animate({ 'height': 'toggle' }, 300, function() { $(this).css('overflow', 'visible'); } );
-		}, 
+		},
 		// mouse out handler
 		out: function() {
 			$(this).removeClass('hover').children('ul, .mega-menu').animate({ 'height': 'toggle' }, 300, function() { $(this).css('overflow', 'visible'); } );
@@ -406,8 +406,8 @@ jQuery(function($) {
 		// A simple delay, in milliseconds, before the "out" function is called
 		timeout: 200
 	});
-	
-	
+
+
 	/*
 	| ----------------------------------------------------------------------------------
 	| Responsive multi level menu
@@ -419,3 +419,33 @@ jQuery(function($) {
 		animationClasses : { classin : 'dl-animate-in-5', classout : 'dl-animate-out-5' }
 	});
 });
+
+oscar.basket.init = function(options) {
+    if (typeof options == 'undefined') {
+        options = {'basketURL': document.URL};
+    }
+    oscar.basket.url = options.basketURL || document.URL;
+    $('#main-content').on('click', '#basket_formset button[data-behaviours~="remove"]', function(event) {
+        oscar.basket.checkAndSubmit($(this), 'form', 'DELETE');
+        event.preventDefault();
+    });
+    $('#main-content').on('click', '#basket_formset a[data-behaviours~="save"]', function(event) {
+        oscar.basket.checkAndSubmit($(this), 'form', 'save_for_later');
+        event.preventDefault();
+    });
+    $('#main-content').on('click', '#saved_basket_formset a[data-behaviours~="move"]', function(event) {
+        oscar.basket.checkAndSubmit($(this), 'saved', 'move_to_basket');
+    });
+    $('#main-content').on('click', '#saved_basket_formset button[data-behaviours~="remove"]', function(event) {
+        oscar.basket.checkAndSubmit($(this), 'saved', 'DELETE');
+        event.preventDefault();
+    });
+    $('#main-content').on('click', '#voucher_form_link a', function(event) {
+        oscar.basket.showVoucherForm();
+        event.preventDefault();
+    });
+    $('#main-content').on('click', '#voucher_form_cancel', function(event) {
+        oscar.basket.hideVoucherForm();
+        event.preventDefault();
+    });
+};

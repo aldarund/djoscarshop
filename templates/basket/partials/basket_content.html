@@ -28,13 +28,16 @@
 			<section class="section">
 				<div class="container">
 
+        <form action="." method="post" class="basket_summary" id="basket_formset">
+          {% csrf_token %}
+            {{ formset.management_form }}
 					<table class="tbl-cart">
 						<thead>
 							<tr>
 								<th>Product Name</th>
-								<th style="width: 15%;">Unit Price</th>
+								<th style="width: 15%;">{% trans 'Price' %}</th>
 								<th style="width: 15%;">{% trans 'Quantity' %}</th>
-								<th class="hidden-xs" style="width: 15%;">Sub Total</th>
+								<th class="hidden-xs" style="width: 15%;">{% trans 'Total' %}</th>
 								<th class="hidden-xs" style="width: 10%;"></th>
 							</tr>
 						</thead>
@@ -48,6 +51,7 @@
                             {% with line=form.instance product=form.instance.product %}
 							<tr>
 								<td>
+                                  {{ form.id }}
                                   {% with image=product.primary_image %}
                                   {% thumbnail image.original "450x600" upscale=False as thumb %}
                                   <a class="entry-thumbnail" href="{{ product.get_absolute_url }}" data-toggle="lightbox">
@@ -57,7 +61,15 @@
                                 {% endwith %}
 									<a class="entry-title" href="{{ product.get_absolute_url }}">{{ product.get_title }}</a>
 								</td>
-								<td><span class="unit-price">$350.00</span></td>
+								<td>
+                                  <span class="unit-price">
+                                    {% if line.is_tax_known %}
+                                        {{ line.unit_price_incl_tax|currency:line.price_currency }}
+                                    {% else %}
+                                        {{ line.unit_price_excl_tax|currency:line.price_currency }}
+                                    {% endif %}
+                                  </span>
+                                </td>
 								<td>
 									<div class="qty-btn-group">
 										<button type="button" class="down"><i class="iconfont-caret-down inline-middle"></i></button>
@@ -65,17 +77,34 @@
 										<button type="button" class="up"><i class="iconfont-caret-up inline-middle"></i></button>
 									</div>
 								</td>
-								<td class="hidden-xs"><strong class="text-bold row-total">$350.00</strong></td>
-								<td class="hidden-xs"><button type="button" class="close" aria-hidden="true">×</button></td>
+								<td class="hidden-xs">
+                                  <strong class="text-bold row-total">
+                                    {% if line.is_tax_known %}
+                                        {{ line.line_price_incl_tax|currency:line.price_currency }}
+                                    {% else %}
+                                        {{ line.line_price_excl_tax|currency:line.price_currency }}
+                                    {% endif %}
+                                  </strong>
+                                </td>
+								<td class="hidden-xs">
+                                  <button data-id="{{ forloop.counter0 }}"
+                                          data-behaviours="remove" type="button" class="close"
+                                          aria-hidden="true">×</button>
+                                  <div style="display:none">
+                                    {{ form.save_for_later }}
+                                    {{ form.DELETE }}
+                                  </div>
+                                </td>
 							</tr>
                             {% endwith %}
                             {% endfor %}
 						</tbody>
 					</table>
+                    </form>
 
 					<div class="pull-left coupon m-b">
 						<div class="input-group">
-							<label for="apply-coupon" class="placeholder">Enter Your Coupon Code</label>
+							<label for="apply-coupon" class="placeholder">{% trans "Voucher/promo code" %}</label>
 							<input type="text" id="apply-coupon" name="coupon" class="form-control" required />
 							<span class="input-group-btn">
                               <form id="voucher_form" action="{% url 'basket:vouchers-add' %}" method="post">
@@ -88,22 +117,20 @@
 					</div>
 
 					<div class="shopcart-total pull-right clearfix">
-						<div class="cart-subtotal text-xs m-b-sm clearfix">
-							<span class="pull-left">Sub Total:</span>
-							<span class="pull-right">$1050.00</span>
-						</div>
-						<div class="cart-total text-bold m-b-lg clearfix">
-							<span class="pull-left">Grand Total:</span>
-							<span class="pull-right">$1050.00</span>
-						</div>
-                        {% block formactions %}
-						<div class="text-center">
-							<a class="btn btn-round btn-default uppercase"
-                               href="{% url 'checkout:index' %}">{% trans "Proceed to checkout" %}</a>
-						</div>
-                        {% endblock %}
-					</div>
+                      {% block baskettotals %}
+                      <div class="sub-header">
+                        <h2>{% trans "Totals" %}</h2>
+                      </div>
+                      {% include 'basket/partials/basket_totals.html' with editable=1 %}
+                      {% endblock baskettotals %}
 
+                      {% block formactions %}
+					  <div class="text-center">
+						<a class="btn btn-round btn-default uppercase"
+                           href="{% url 'checkout:index' %}">{% trans "Proceed to checkout" %}</a>
+					  </div>
+                      {% endblock %}
+					</div>
 				</div>
 			</section>
 		</main>
@@ -215,14 +242,14 @@
     <!--         {% endif %} -->
     <!--     {% endblock vouchers %} -->
 
-    <!--     {% block baskettotals %} -->
+    <!--     {% block baskettotals_ %} -->
     <!--         <div class="span6"> -->
     <!--             <div class="sub-header"> -->
     <!--                 <h2>{% trans "Totals" %}</h2> -->
     <!--             </div> -->
     <!--             {% include 'basket/partials/basket_totals.html' with editable=1 %} -->
     <!--         </div> -->
-    <!--     {% endblock baskettotals %} -->
+    <!--     {% endblock baskettotals_ %} -->
     <!-- </div> -->
 
 
