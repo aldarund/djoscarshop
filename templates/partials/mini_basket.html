@@ -9,7 +9,7 @@
 <div id="sub-cart" class="sub-header">
   <header class="cart-header">
 	<span>Your cart is currently empty.</span>
-	<small><a href="./cart.html">(See All)</a></small>
+	<small><a href="{% url 'basket:summary' %}">({% trans 'All' %})</a></small>
   </header>
   <ul class="cart-items product-medialist unstyled clearfix">
   </ul>

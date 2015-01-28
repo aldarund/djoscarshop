@@ -2,27 +2,26 @@
 {% load i18n %}
 {% load purchase_info_tags %}
 
-<s class="entry-discount">$ 350.00</s>
-<strong class="accent-color price">$ 250.00</strong>
-
 {% purchase_info_for_product request product as session %}
 
 {% if session.price.exists %}
     {% if session.price.excl_tax == 0 %}
-        <p class="price_color">{% trans "Free" %}</p>
+        <strong class="accent-color price">$0.00</strong>
+        <span>{% trans "Free" %}</span>
     {% elif session.price.is_tax_known %}
-        <p class="price_color">{{ session.price.incl_tax|currency:session.price.currency }}</p>
+        <s class="entry-discount">{{ session.price.excl_tax|currency:session.price.currency }}</s>
+        <strong class="accent-color price">{{ session.price.incl_tax|currency:session.price.currency }}</strong>
     {% else %}
-        <p class="price_color">{{ session.price.excl_tax|currency:session.price.currency }}</p>
+        <strong class="price">{{ session.price.excl_tax|currency:session.price.currency }}</strong>
     {% endif %}
-{% else %}
-    <p class="price_color">&nbsp;</p>
 {% endif %}
-<p class="{{ session.availability.code }} availability">
-    <i class="icon-{% if session.availability.is_available_to_buy %}ok{% else %}remove{% endif %}"></i>
+
+{% if not session.availability.is_available_to_buy %}
+    <strong class="price">
     {% if verbose %}
         {{ session.availability.message }}
     {% else %}
         {{ session.availability.short_message }}
     {% endif %}
-</p>
+    </strong>
+{% endif %}

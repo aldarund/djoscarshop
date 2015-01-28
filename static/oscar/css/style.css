@@ -2225,6 +2225,10 @@ a:hover {
 	border-color: #fa6f57;
 	color: #ff4849;
 }
+.product .ribbon.ribbon-unavailable {
+	border-color: #939695;
+	color: #939695;
+}
 .visible-items-3 .product .entry-title {
 	font-size: 1.125em;
 }

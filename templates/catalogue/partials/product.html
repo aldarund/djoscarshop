@@ -4,11 +4,12 @@
 {% load i18n %}
 {% load display_tags %}
 {% load staticfiles %}
+{% load purchase_info_tags %}
 
 {% block product %}
 <div class="product" data-product-id="{{ product.pk }}"
      data-category="women|women-jeans|women-skirt"
-     data-brand="brand1" data-price="250"
+     data-brand="brand1" data-price="{{ product.price }}"
      data-colors="red|blue|black|white"
      data-size="S|M|L">
   <div class="entry-media">
@@ -24,7 +25,12 @@
 	  <a href="{{ product.get_absolute_url }}" class="entry-url"></a>
 	  <ul class="icons unstyled">
 		<li>
+          {% purchase_info_for_product request product as session %}
+          {% if not session.availability.is_available_to_buy %}
+		  <div class="circle ribbon ribbon-unavailable">Sold</div>
+          {% else %}
 		  <div class="circle ribbon ribbon-sale">Sale</div>
+          {% endif %}
 		</li>
 		<li>
 		  <a href="#" class="circle" data-toggle="lightbox"><i class="iconfont-search"></i></a>
@@ -57,8 +63,7 @@
       {% include "catalogue/partials/stock_record.html" %}
 	</div>
 	<div class="entry-links clearfix">
-	  <a href="#" class="pull-left m-r">+ Add to Wishlist</a>
-	  <a href="#" class="pull-right">+ Add to Compare</a>
+      {% include 'catalogue/partials/add_to_wishlist.html'%}
 	</div>
     {% endblock %}
   </div>

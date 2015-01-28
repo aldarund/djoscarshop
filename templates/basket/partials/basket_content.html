@@ -53,7 +53,7 @@
 								<td>
                                   {{ form.id }}
                                   {% with image=product.primary_image %}
-                                  {% thumbnail image.original "450x600" upscale=False as thumb %}
+                                  {% thumbnail image.original "450x600" crop='center' upscale=True as thumb %}
                                   <a class="entry-thumbnail" href="{{ product.get_absolute_url }}" data-toggle="lightbox">
                                     <img src="{{ thumb.url }}" alt="{{ product.get_title }}" />
                                   </a>
