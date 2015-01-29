@@ -68,45 +68,45 @@ jQuery(function($) {
 			qty: 1
 		};
 
-		/* Add to Cart Animation - Credits : http://codepen.io/ElmahdiMahmoud/pen/tEeDn */
-		var $imgToDrag = $item.find( $container.data('thumbnail') ),
-			$cart = $('.header-top [data-target="#sub-cart"]'),
-			$imgClone = $imgToDrag.clone()
-				.offset({
-					top: $imgToDrag.offset().top,
-					left: $imgToDrag.offset().left
-				})
-				.css({
-					'opacity': '0.5',
-					'position': 'absolute',
-					'height': '150px',
-					'width': '150px',
-					'z-index': '100000'
-				})
-				.appendTo( $('body') )
-				.animate({
-					'top': $cart.offset().top + 10,
-					'left': $cart.offset().left + 10,
-					'width': 75,
-					'height': 75
-				}, 1000, 'easeInQuad', function() {
-					$(this).animate({
-						'width': 0,
-						'height': 0
-					}, function () {
-						$(this).detach();
-					});
-
-					var $notification = $('.cart-notification ul'),
-						$newNotify = $('<li><strong>"' + data.title + '"</strong> Added to Your Cart Succesfully.</li>').hide();
-
-					$newNotify.appendTo($notification).slideDown(400, function() {
-						setTimeout(function() { $newNotify.slideUp(400, function() { $(this).remove(); }); }, 2000);
-					});
-				});
-
 		updateStorage(data);
-        addCartAJAX($this.parent(), data);
+        addCartAJAX($this.parent(), data, function () {
+		    /* Add to Cart Animation - Credits : http://codepen.io/ElmahdiMahmoud/pen/tEeDn */
+		    var $imgToDrag = $item.find( $container.data('thumbnail') ),
+			    $cart = $('.header-top [data-target="#sub-cart"]'),
+			    $imgClone = $imgToDrag.clone()
+				    .offset({
+					    top: $imgToDrag.offset().top,
+					    left: $imgToDrag.offset().left
+				    })
+				    .css({
+					    'opacity': '0.5',
+					    'position': 'absolute',
+					    'height': '150px',
+					    'width': '150px',
+					    'z-index': '100000'
+				    })
+				    .appendTo( $('body') )
+				    .animate({
+					    'top': $cart.offset().top + 10,
+					    'left': $cart.offset().left + 10,
+					    'width': 75,
+					    'height': 75
+				    }, 1000, 'easeInQuad', function() {
+					    $(this).animate({
+						    'width': 0,
+						    'height': 0
+					    }, function () {
+						    $(this).detach();
+					    });
+
+					    var $notification = $('.cart-notification ul'),
+						    $newNotify = $('<li><strong>"' + data.title + '"</strong> Added to Your Cart Succesfully.</li>').hide();
+
+					    $newNotify.appendTo($notification).slideDown(400, function() {
+						    setTimeout(function() { $newNotify.slideUp(400, function() { $(this).remove(); }); }, 2000);
+					    });
+				    });
+        });
 	});
 
 
@@ -200,9 +200,6 @@ jQuery(function($) {
 							</li>');
 
 				$new.appendTo($cartItems);
-                $new.on('click', '.close', function () {
-                    alert('here');
-                });
 				$new.find('[data-toggle="lightbox"]').magnificPopup({
 					type: 'image'
 				});
@@ -232,10 +229,26 @@ jQuery(function($) {
 	updateCart();
 
 
-	function addCartAJAX(form, data)
+	function addCartAJAX(form, data, handler)
 	{
-        form.ajaxSubmit(function (event) {
-			updateCart(data);
+        form.ajaxSubmit(function (answer) {
+            if (answer.status == 'success') {
+			    updateCart(data);
+                handler();
+            } else {
+                for (etype in answer.messages) {
+                    for (i in answer.messages[etype]){
+                        msg = answer.messages[etype][i];
+                        tname = etype.charAt(0).toUpperCase() + etype.slice(1);
+				        var $notification = $('.cart-notification ul'),
+					        $newNotify = $('<li><strong>' + tname + '! </strong> '+ msg +'</li>').hide();
+
+				        $newNotify.appendTo($notification).slideDown(400, function() {
+					        setTimeout(function() { $newNotify.slideUp(400, function() { $(this).remove(); }); }, 2000);
+				        });
+                    }
+                }
+            }
         });
 	}
 });
