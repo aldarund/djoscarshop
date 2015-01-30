@@ -157,14 +157,19 @@ jQuery(function($) {
 		cart_storage.set(storage);
 	}
 
-	function updateCart()
+	function updateCart(initial)
 	{
+        if (initial) {
+            for (x in initial) {
+                updateStorage(initial[x]);
+            }
+        }
+
 		var storage = cart_storage.get();
 		var $cartPop = $('#sub-cart'),
 			$cartItems = $cartPop.find('.cart-items'),
 			$cartHeader = $cartPop.find('.cart-header'),
 			$cartTotal = $cartPop.find('.cart-total .total');
-
 
 		$cartItems.empty();
 		$cartHeader.find('small').hide();
@@ -226,8 +231,7 @@ jQuery(function($) {
 		}
 
 	}
-	updateCart();
-
+	updateCart($initial_cart);
 
 	function addCartAJAX(form, data, handler)
 	{
