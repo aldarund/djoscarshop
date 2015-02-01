@@ -68,7 +68,6 @@ jQuery(function($) {
 			qty: 1
 		};
 
-		updateStorage(data);
         addCartAJAX($this.parent(), data, function () {
 		    /* Add to Cart Animation - Credits : http://codepen.io/ElmahdiMahmoud/pen/tEeDn */
 		    var $imgToDrag = $item.find( $container.data('thumbnail') ),
@@ -237,7 +236,8 @@ jQuery(function($) {
 	{
         form.ajaxSubmit(function (answer) {
             if (answer.status == 'success') {
-			    updateCart(data);
+		        updateStorage(data);
+			    updateCart();
                 handler();
             } else {
                 for (etype in answer.messages) {
