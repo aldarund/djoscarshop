@@ -11,4 +11,9 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.sitemaps',
     'compressor',
-) + tuple(oscar.get_core_apps(['demoshop.basket',]))
+) + tuple(oscar.get_core_apps([
+    'demoshop.basket',
+    'demoshop.promotions',
+    'demoshop.dashboard',
+    'demoshop.dashboard.promotions',
+]))
