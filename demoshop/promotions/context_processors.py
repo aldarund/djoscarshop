@@ -12,9 +12,9 @@ def promotions(request):
         try:
             promo.extendedpagepromotion
         except:
-            continue
-        if promo.extendedpagepromotion is None:
             promos.append(promo)
+        else:
+            continue
     split_by_position(promos, context)
     promos = get_global_promotions(request)
     split_by_position(promos, context)
