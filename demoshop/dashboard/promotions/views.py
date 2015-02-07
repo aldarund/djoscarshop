@@ -6,7 +6,6 @@ class UpdateMixin(object):
     def add_to_page(self, promotion, request, *args, **kwargs):
         instance = self.link_form_class.Meta.model(content_object=self.get_object())
         form = self.link_form_class(request.POST, instance=instance)
-        print type(instance)
         if form.is_valid():
             form.save()
             print form.cleaned_data, instance.global_use
