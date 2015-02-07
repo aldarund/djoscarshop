@@ -30,6 +30,7 @@ def push(should_restart='yes', update_deps='no'):
             if update_deps == 'yes':
                 deps()
             virtualenv('./manage.py syncdb')
+            virtualenv('./manage.py migrate')
             virtualenv('./manage.py collectstatic')
         if should_restart == 'yes':
             restart()
