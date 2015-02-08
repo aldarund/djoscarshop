@@ -32,6 +32,9 @@
 
 			<div class="flexslider">
 				<ul class="slides">
+                  {% for promotion in promotions_slider %}
+                  {% render_promotion promotion %}
+                  {% endfor %}
 					<!-- THE FIRST SLIDE -->
 					<li>
 						<!-- THE MAIN IMAGE IN THE SLIDE -->
@@ -135,46 +138,11 @@
 			<section class="section promos">
 				<div class="container">
 					<div class="row">
-
-						<div class="col-md-4">
-							<div class="promo accent-background first-child first-row animated" data-animation="fadeInLeft">
-								<div class="inner text-center">
-									<h1 class="uppercase text-semibold">
-										<a href="#">
-											<span class="inverse-color">Sale</span> Up to 35% <span class="inverse-color">OFF</span>
-										</a>
-									</h1>
-									<h5 class="uppercase">Summer collection 2013</h5>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-md-4">
-						  <div class="promo inverse-background first-row animated" data-animation="fadeInDown" style="background: url('{% static 'oscar/img/dummy/500x400.jpg' %}') no-repeat; background-size: 100%;">
-								<div class="inner text-center np">
-									<div class="ribbon">
-										<h6 class="nmb">New Arrivals</h6>
-										<h5 class="text-semibold uppercase nmb">Leather Fashion</h5>
-										<div class="space10"></div>
-										<a href="products.html" class="with-icon prepend-icon"><i class="iconfont-caret-right"></i><span> Shop Now</span></a>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-md-4">
-							<div class="promo inverse-background first-row animated" data-animation="fadeInRight">
-								<div class="inner text-center">
-									<h1 class="uppercase text-bold">
-										<a href="#">
-											Free <span class="inverse-color">Shipping</span>
-										</a>
-									</h1>
-									<h5 class="uppercase">On oder over $2,000</h5>
-								</div>
-							</div>
-						</div>
-
+                      {% for promotion in promotions_global_top|slice:'3' %}
+					  <div class="col-md-4">
+                        {% render_promotion promotion %}
+					  </div>
+                      {% endfor %}
 					</div>
 				</div>
 			</section>

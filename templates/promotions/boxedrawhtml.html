@@ -1,0 +1,6 @@
+<div class="promo inverse-background {% if forloop.first %}first-row{% endif %} animated" data-title="{{ promotion.name }}"
+     {% if promotion.animation %}data-animation="{{ promotion.animation }}"{% endif %}>
+  <div class="inner text-center {% if promotion.wide %}np{% endif %}">
+    {{ promotion.body|safe }}
+  </div>
+</div>
