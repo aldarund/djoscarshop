@@ -47,11 +47,13 @@ class CreateRedirectView(CreateRedirectView):
 class UpdateMixin(object):
 
     def add_to_page(self, promotion, request, *args, **kwargs):
-        instance = self.link_form_class.Meta.model(content_object=self.get_object())
+        if 'global_use' in request.POST:
+            instance = self.link_form_class.Meta.model(content_object=self.get_object())
+        else:
+            instance = PagePromotion(content_object=self.get_object())
         form = self.link_form_class(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            print form.cleaned_data, instance.global_use
             page_url = form.cleaned_data['page_url']
             messages.success(request, _("Content block '%(block)s' added to"
                                         " page '%(page)s'")
