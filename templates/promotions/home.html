@@ -33,96 +33,10 @@
 			<div class="flexslider">
 				<ul class="slides">
                   {% for promotion in promotions_slider %}
-                  {% render_promotion promotion %}
+					<li>
+                      {% render_promotion promotion %}
+					</li>
                   {% endfor %}
-					<!-- THE FIRST SLIDE -->
-					<li>
-						<!-- THE MAIN IMAGE IN THE SLIDE -->
-						<img src="{% static 'oscar/img/dummy/1600x600.jpg' %}" alt="" />
-
-						<!-- THE CAPTIONS OF THE FIRST SLIDE -->
-						<div class="flex-caption h6 text-bold gfc uppercase animated"
-						data-animation="fadeInLeftBig"
-						data-x="800"
-						data-y="110"
-						data-speed="600"
-						data-start="1200">New Collection</div>
-
-						<div class="flex-caption herotext text-bold gfc animated"
-						data-animation="fadeInRightBig"
-						data-x="580"
-						data-y="140"
-						data-speed="900"
-						data-start="2000">Autumn Fashions</div>
-
-						<div class="flex-caption h6 text-bold gfc text-center animated"
-						data-animation="fadeInDown"
-						data-x="639"
-						data-y="260"
-						data-speed="1600"
-						data-start="2900">
-							Comfy knits and warm jackets for cooler Autumn days<br/>
-							<a href="products.html" class="btn btn-primary uppercase">Shop Now</a>
-						</div>
-
-					</li>
-
-					<!-- THE SECOND SLIDE -->
-					<li style="background: #fa6f57;">
-						<!-- THE MAIN IMAGE IN THE SLIDE -->
-						<img src="{% static 'oscar/img/transparent.png' %}" alt="" />
-
-						<div class="flex-caption super-giant gfc animated uppercase"
-						data-animation="fadeInUp"
-						data-x="center"
-						data-y="60"
-						data-speed="500"
-						data-start="900">Sale</div>
-
-						<div id="caption-left-round" class="flex-caption round gfc animated uppercase"
-						data-animation="fadeInLeftBig"
-						data-x="140"
-						data-y="60"
-						data-speed="600"
-						data-start="1200"><div class="vmid"><span>Mid<br/>Season</span></div></div>
-
-						<div class="flex-caption round gfc animated uppercase"
-						data-animation="fadeInRightBig"
-						data-x="925"
-						data-y="60"
-						data-speed="600"
-						data-start="1200"><div class="vmid"><span>Up to<br/>70% off</span></div></div>
-
-						<div class="flex-caption h3 gfc animated uppercase"
-						data-animation="fadeInDown"
-						data-x="center"
-						data-y="250"
-						data-speed="400"
-						data-start="1800"><strong class="text-bold">500’s </strong>of New Products</div>
-
-					</li>
-
-					<!-- THE SECOND SLIDE -->
-					<li>
-						<!-- THE MAIN IMAGE IN THE SLIDE -->
-						<img src="{% static 'oscar/img/dummy/1600x600.jpg' %}" alt="" />
-
-						<div class="flex-caption herotext text-bold gfc bg-dark animated uppercase"
-						data-animation="fadeInUpBig"
-						data-x="760"
-						data-y="60"
-						data-speed="900"
-						data-start="100">Free Shipping</div>
-
-						<div class="flex-caption h2 text-bold gfc bg-dark animated uppercase"
-						data-animation="fadeInUpBig"
-						data-x="797"
-						data-y="175"
-						data-speed="600"
-						data-start="900">On Order over $2.000</div>
-
-					</li>
-
 				</ul>
 			</div>
 
