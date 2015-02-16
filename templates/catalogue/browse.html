@@ -6,6 +6,7 @@
 {% load category_tags %}
 {% load product_tags %}
 {% load i18n %}
+{% load product_variants %}
 
 {% block extrascripts %}
 {{ block.super }}
@@ -41,209 +42,155 @@
 
 {% block column_left %}
 <aside class="col-xs-12 col-sm-4 col-md-3">
-			<section class="sidebar push-up">
+            <section class="sidebar push-up">
 
-			  <!-- CATEGORIES -->
-			  <section class="side-section bg-white">
-				<header class="side-section-header">
-				  <h3 class="side-section-title">{% trans 'Categories' %}</h3>
-				</header>
-				<div class="side-section-content">
+              <!-- CATEGORIES -->
+              <section class="side-section bg-white">
+                <header class="side-section-header">
+                  <h3 class="side-section-title">{% trans 'Categories' %}</h3>
+                </header>
+                <div class="side-section-content">
                   {% category_tree depth=2 as tree_categories %}
                   {% if tree_categories %}
-				  <ul id="category-list" class="vmenu unstyled">
+                  <ul id="category-list" class="vmenu unstyled">
                   {% for tree_category, info in tree_categories %}
                   {% if info.has_children %}
-					<li>
-					  <input type="checkbox" id="check-women" class="prettyCheckable" data-label="{{ tree_category.name }}" data-labelPosition="right" value="women" />
-					  <ul>
+                    <li>
+                      <input type="checkbox" id="check-women" class="prettyCheckable" data-label="{{ tree_category.name }}" data-labelPosition="right" value="women" />
+                      <ul>
                   {% else %}
-						<li><input type="checkbox" id="check-women-accessories" class="prettyCheckable" data-label="{{ tree_category.name }}" data-labelPosition="right" value="women-accessories" /></li>
+                        <li><input type="checkbox" id="check-women-accessories" class="prettyCheckable" data-label="{{ tree_category.name }}" data-labelPosition="right" value="women-accessories" /></li>
                   {% endif %}
                   {% for close in info.num_to_close %}
-					  </ul>
-					</li>
+                      </ul>
+                    </li>
                   {% endfor %}
 
                   {% endfor %}
 
                     {% for promotion in promotions_page %}
-					<li>
-					  <input type="checkbox" id="check-best" class="prettyCheckable" data-label="{{ promotion.name }}" data-labelPosition="right" value="best" />
-					</li>
+                    <li>
+                      <input type="checkbox" id="check-best" class="prettyCheckable" data-label="{{ promotion.name }}" data-labelPosition="right" value="best" />
+                    </li>
                     {% endfor %}
-				  </ul>
+                  </ul>
                   {% endif %}
-				</div>
-				<footer class="side-section-footer text-center hide">
-				  <button type="button" id="btn-filter-cat" class="btn btn-primary btn-round uppercase">Clear Filters</button>
-				</footer>
-			  </section>
-			  <!-- // CATEGORIES -->
+                </div>
+                <footer class="side-section-footer text-center hide">
+                  <button type="button" id="btn-filter-cat" class="btn btn-primary btn-round uppercase">Clear Filters</button>
+                </footer>
+              </section>
+              <!-- // CATEGORIES -->
 
-			  <!-- BRANDS -->
-			  <section class="side-section bg-white">
-				<header class="side-section-header">
-				  <h3 class="side-section-title">Brands</h3>
-				</header>
-				<div class="side-section-content">
-				  <ul id="brands-list" class="vmenu unstyled">
-					<li>
-					  <input type="checkbox" id="check-brand1" class="prettyCheckable" data-label="Because" data-labelPosition="right" value="brand1" />
-					</li>
-					<li>
-					  <input type="checkbox" id="check-brand2" class="prettyCheckable" data-label="Lorem" data-labelPosition="right" value="brand2" />
-					</li>
-					<li>
-					  <input type="checkbox" id="check-brand3" class="prettyCheckable" data-label="Ipsum" data-labelPosition="right" value="brand3" />
-					</li>
-					<li>
-					  <input type="checkbox" id="check-brand4" class="prettyCheckable" data-label="Is too" data-labelPosition="right" value="brand4" />
-					</li>
-					<li>
-					  <input type="checkbox" id="check-brand5" class="prettyCheckable" data-label="Mainstream" data-labelPosition="right" value="brand5" />
-					</li>
-				  </ul>
-				</div>
-				<footer class="side-section-footer text-center hide">
-				  <button type="button" id="btn-filter-brand" class="btn btn-primary btn-round uppercase">Clear Filters</button>
-				</footer>
-			  </section>
-			  <!-- // BRANDS -->
+              <!-- BRANDS -->
+              {% get_variant_options 'brand' as brands %}
+              <section class="side-section bg-white">
+                <header class="side-section-header">
+                  <h3 class="side-section-title">{{ brands.group.name }}</h3>
+                </header>
+                <div class="side-section-content">
+                  <ul id="brands-list" class="vmenu unstyled">
+                    {% for item in brands.options %}
+                    <li>
+                      <input type="checkbox" id="check-brand1" class="prettyCheckable" data-label="{{ item.option }}" data-labelPosition="right" value="{{ item.option }}" />
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <footer class="side-section-footer text-center hide">
+                  <button type="button" id="btn-filter-brand" class="btn btn-primary btn-round uppercase">Clear Filters</button>
+                </footer>
+              </section>
+              <!-- // BRANDS -->
 
-			  <!-- PRODUCT FILTER -->
-			  <section class="side-section bg-white">
-				<header class="side-section-header">
-				  <h3 class="side-section-title">Filter</h3>
-				</header>
+              <!-- PRODUCT FILTER -->
+              <section class="side-section bg-white">
+                <header class="side-section-header">
+                  <h3 class="side-section-title">Filter</h3>
+                </header>
 
-				<!-- PRICE RANGE SLIDER -->
-				<div id="filter-by-price" class="side-section-content">
-				  <h4 class="side-section-subheader">Filter By Price</h4>
-				  <div class="range-slider-container">
-					<div class="range-slider" data-min="0" data-max="2000" data-step="10" data-currency="$"></div>
-					<div class="range-slider-value clearfix">
-					  <span>Price: &ensp;</span>
-					  <span class="min"></span>
-					  <span class="max"></span>
-					</div>
-				  </div>
-				</div>
-				<!-- // PRICE RANGE SLIDER -->
+                <!-- PRICE RANGE SLIDER -->
+                <div id="filter-by-price" class="side-section-content">
+                  <h4 class="side-section-subheader">Filter By Price</h4>
+                  <div class="range-slider-container">
+                    <div class="range-slider" data-min="0" data-max="2000" data-step="10" data-currency="$"></div>
+                    <div class="range-slider-value clearfix">
+                      <span>Price: &ensp;</span>
+                      <span class="min"></span>
+                      <span class="max"></span>
+                    </div>
+                  </div>
+                </div>
+                <!-- // PRICE RANGE SLIDER -->
 
-				<!-- FILTER BY SIZE -->
-				<div id="filter-by-size" class="side-section-content">
-				  <h4 class="side-section-subheader">Filter By Size</h4>
-				  <ul class="inline-li li-m-lg text-center unstyled">
-					<li>
-					  <a href="#" class="round-icon" data-toggle="tooltip" data-title="X-Small / UK 8"><small>XS</small></a>
-					  <input type="checkbox" class="filter-checkbox filter-size" value="XS" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon" data-toggle="tooltip" data-title="Small / UK 10"><small>S</small></a>
-					  <input type="checkbox" class="filter-checkbox filter-size" value="S" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon" data-toggle="tooltip" data-title="Medium / UK 12"><small>M</small></a>
-					  <input type="checkbox" class="filter-checkbox filter-size" value="M" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon" data-toggle="tooltip" data-title="Large / UK 14"><small>L</small></a>
-					  <input type="checkbox" class="filter-checkbox filter-size" value="L" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon" data-toggle="tooltip" data-title="X-Large / UK 16"><small>XL</small></a>
-					  <input type="checkbox" class="filter-checkbox filter-size" value="XL" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon" data-toggle="tooltip" data-title="XX-Large"><small>XXL</small></a>
-					  <input type="checkbox" class="filter-checkbox filter-size" value="XXL" />
-					</li>
-				  </ul>
-				</div>
-				<!-- // FILTER BY SIZE -->
+                <!-- FILTER BY SIZE -->
+                {% get_variant_options 'size' as sizes %}
+                <div id="filter-by-size" class="side-section-content">
+                  <h4 class="side-section-subheader">Filter By {{ sizes.group.name }}</h4>
+                  <ul class="inline-li li-m-lg text-center unstyled">
+                    {% for item in sizes.options %}
+                    <li>
+                      <a href="#" class="round-icon" data-toggle="tooltip" data-title="{{ item.option }}"><small>{{ item.option }}</small></a>
+                      <input type="checkbox" class="filter-checkbox filter-size" value="{{ item.option }}" />
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <!-- // FILTER BY SIZE -->
 
-				<!-- FILTER BY COLOR -->
-				<div id="filter-by-color" class="side-section-content">
-				  <h4 class="side-section-subheader">Filter By Colour</h4>
-				  <ul class="inline-li li-m-sm text-center unstyled">
-					<li>
-					  <a href="#" class="round-icon color-box" data-toggle="tooltip" data-title="Black" style="background: #000;"></a>
-					  <input type="checkbox" class="filter-checkbox filter-color" value="black" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon color-box" data-toggle="tooltip" data-title="White" style="background: #fff; border-color: #acacac;"></a>
-					  <input type="checkbox" class="filter-checkbox filter-color" value="white" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon color-box" data-toggle="tooltip" data-title="Green" style="background: #60bd0d;"></a>
-					  <input type="checkbox" class="filter-checkbox filter-color" value="green" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon color-box" data-toggle="tooltip" data-title="Red" style="background: #ff5757;"></a>
-					  <input type="checkbox" class="filter-checkbox filter-color" value="red" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon color-box" data-toggle="tooltip" data-title="Blue" style="background: #0d9abd;"></a>
-					  <input type="checkbox" class="filter-checkbox filter-color" value="blue" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon color-box" data-toggle="tooltip" data-title="Brown" style="background: #c57313;"></a>
-					  <input type="checkbox" class="filter-checkbox filter-color" value="brown" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon color-box" data-toggle="tooltip" data-title="Purple" style="background: #a613c5;"></a>
-					  <input type="checkbox" class="filter-checkbox filter-color" value="purple" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon color-box" data-toggle="tooltip" data-title="Silver" style="background: #e5e5e8;"></a>
-					  <input type="checkbox" class="filter-checkbox filter-color" value="silver" />
-					</li>
-					<li>
-					  <a href="#" class="round-icon color-box" data-toggle="tooltip" data-title="Patternie" style="background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAHklEQVQIW2NkYGD4D8QgwAgjMASgCiAqwcqgACwAAIrDBAOqGrGNAAAAAElFTkSuQmCC');"></a>
-					  <input type="checkbox" class="filter-checkbox filter-color" value="patternie" />
-					</li>
-				  </ul>
-				</div>
-				<!-- // FILTER BY COLOR -->
-			  </section>
-			  <!-- // PRODUCT FILTER -->
+                {% get_variant_options 'color' as colors %}
+                <!-- FILTER BY COLOR -->
+                <div id="filter-by-color" class="side-section-content">
+                  <h4 class="side-section-subheader">Filter By {{ colors.group.name }}</h4>
+                  <ul class="inline-li li-m-sm text-center unstyled">
+                    {% for item in colors.options %}
+                    <li>
+                      <a href="#" class="round-icon color-selector-{{ item.option|lower }} color-box"
+                         data-toggle="tooltip" data-title="{{ item.option }}"></a>
+                      <input type="checkbox" class="filter-checkbox filter-color" value="{{ item.option }}" />
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <!-- // FILTER BY COLOR -->
+              </section>
+              <!-- // PRODUCT FILTER -->
 
-			  <!-- BEST SELLERS -->
-			  <section class="side-section bg-white">
-				<header class="side-section-header">
-				  <h3 class="side-section-title">Best Sellers</h3>
-				</header>
-				<div class="side-section-content">
-				  <ul class="product-medialist li-m-t unstyled clearfix">
-					<li>
-					  <div class="item clearfix">
-						<a href="img/dummy/450x600.png" data-toggle="lightbox" class="entry-thumbnail">
-						  <img src="img/dummy/450x600.png" alt="Inceptos orci hac libero" />
-						</a>
-						<h5 class="entry-title"><a href="product.html">Inceptos orci hac libero</a></h5>
-						<s class="entry-discount m-r-sm"><span class="text-sm">$ 350.00</span></s>
-						<span class="entry-price accent-color">$ 250.00</span>
-					  </div>
-					</li>
-					<li>
-					  <div class="item clearfix">
-						<a href="img/dummy/450x600.png" data-toggle="lightbox" class="entry-thumbnail">
-						  <img src="img/dummy/450x600.png" alt="Inceptos orci hac libero" />
-						</a>
-						<h5 class="entry-title"><a href="product.html">Inceptos orci hac libero</a></h5>
-						<span class="entry-price">$ 350.00</span>
-					  </div>
-					</li>
-				  </ul>
-				</div>
-			  </section>
-			  <!-- // BEST SELLERS -->
+              <!-- BEST SELLERS -->
+              <section class="side-section bg-white">
+                <header class="side-section-header">
+                  <h3 class="side-section-title">Best Sellers</h3>
+                </header>
+                <div class="side-section-content">
+                  <ul class="product-medialist li-m-t unstyled clearfix">
+                    <li>
+                      <div class="item clearfix">
+                        <a href="img/dummy/450x600.png" data-toggle="lightbox" class="entry-thumbnail">
+                          <img src="img/dummy/450x600.png" alt="Inceptos orci hac libero" />
+                        </a>
+                        <h5 class="entry-title"><a href="product.html">Inceptos orci hac libero</a></h5>
+                        <s class="entry-discount m-r-sm"><span class="text-sm">$ 350.00</span></s>
+                        <span class="entry-price accent-color">$ 250.00</span>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item clearfix">
+                        <a href="img/dummy/450x600.png" data-toggle="lightbox" class="entry-thumbnail">
+                          <img src="img/dummy/450x600.png" alt="Inceptos orci hac libero" />
+                        </a>
+                        <h5 class="entry-title"><a href="product.html">Inceptos orci hac libero</a></h5>
+                        <span class="entry-price">$ 350.00</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </section>
+              <!-- // BEST SELLERS -->
 
               {% for promotion in promotions_global_top|slice:'1' %}
               {% render_promotion promotion %}
               {% endfor %}
-			</section>
+            </section>
 </aside>
 
     {% if has_facets %}
@@ -261,42 +208,42 @@
 {% block content %}
 
 <section class="col-xs-12 col-sm-8 col-md-9">
-							<section class="products-wrapper">
-								<!-- DISPLAY MODE - NUMBER OF ITEMS TO BE DISPLAY - PAGINATION -->
-								<header class="products-header">
-									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-6 center-xs">
-											<!-- DISPLAY MODE -->
-											<ul class="unstyled inline-li li-m-r-l-sm pull-left">
-												<li><a class="round-icon active" href="#" data-toggle="tooltip" data-layout="grid" data-title="Switch to List Grid Mode"><i class="iconfont-th"></i></a></li>
-												<li><a class="round-icon" href="#" data-toggle="tooltip" data-layout="list" data-title="Switch to List View Mode"><i class="iconfont-list"></i></a></li>
-											</ul>
-											<!-- // DISPLAY MODE -->
+                            <section class="products-wrapper">
+                                <!-- DISPLAY MODE - NUMBER OF ITEMS TO BE DISPLAY - PAGINATION -->
+                                <header class="products-header">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-6 center-xs">
+                                            <!-- DISPLAY MODE -->
+                                            <ul class="unstyled inline-li li-m-r-l-sm pull-left">
+                                                <li><a class="round-icon active" href="#" data-toggle="tooltip" data-layout="grid" data-title="Switch to List Grid Mode"><i class="iconfont-th"></i></a></li>
+                                                <li><a class="round-icon" href="#" data-toggle="tooltip" data-layout="list" data-title="Switch to List View Mode"><i class="iconfont-list"></i></a></li>
+                                            </ul>
+                                            <!-- // DISPLAY MODE -->
 
-											<!-- NUMBER OF ITEMS TO BE DISPLAY -->
-											<div class="pull-right m-l-lg">
-												<span class="inline-middle m-r-sm text-xs">Show</span>
-												<div class="inline-middle styled-dd">
-													<select>
-														<option value="9">9</option>
-														<option value="12" selected>12</option>
-														<option value="24">24</option>
-														<option value="36">36</option>
-													</select>
-												</div>
-											</div>
-											<!-- // NUMBER OF ITEMS TO BE DISPLAY -->
-										</div>
-										<div class="space30 visible-xs"></div>
-										<!-- PAGINATION -->
+                                            <!-- NUMBER OF ITEMS TO BE DISPLAY -->
+                                            <div class="pull-right m-l-lg">
+                                                <span class="inline-middle m-r-sm text-xs">Show</span>
+                                                <div class="inline-middle styled-dd">
+                                                    <select>
+                                                        <option value="9">9</option>
+                                                        <option value="12" selected>12</option>
+                                                        <option value="24">24</option>
+                                                        <option value="36">36</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <!-- // NUMBER OF ITEMS TO BE DISPLAY -->
+                                        </div>
+                                        <div class="space30 visible-xs"></div>
+                                        <!-- PAGINATION -->
                                         {% include "partials/pagination.html" %}
-										<!-- // PAGINATION -->
-									</div>
-								</header>
-								<!-- // DISPLAY MODE - NUMBER OF ITEMS TO BE DISPLAY - PAGINATION -->
+                                        <!-- // PAGINATION -->
+                                    </div>
+                                </header>
+                                <!-- // DISPLAY MODE - NUMBER OF ITEMS TO BE DISPLAY - PAGINATION -->
 
-								<!-- PRODUCT LAYOUT -->
-								<div class="products-layout grid m-t-b add-cart" data-product=".product"
+                                <!-- PRODUCT LAYOUT -->
+                                <div class="products-layout grid m-t-b add-cart" data-product=".product"
                                      data-thumbnail=".entry-media .thumb" data-title=".entry-title > a"
                                      data-url=".entry-title > a" data-price=".entry-price > .price">
                                   {% if products %}
@@ -306,9 +253,9 @@
                                   {% else %}
                                   <p class="nonefound">{% trans "No products found." %}</p>
                                   {% endif %}
-								</div>
-								<!-- // PRODUCT LAYOUT -->
-							</section>
+                                </div>
+                                <!-- // PRODUCT LAYOUT -->
+                            </section>
 </section>
 
     <form method="get" class="form-horizontal">

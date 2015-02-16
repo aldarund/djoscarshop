@@ -5,13 +5,14 @@
 {% load display_tags %}
 {% load staticfiles %}
 {% load purchase_info_tags %}
+{% load product_variants %}
 
 {% block product %}
 <div class="product" data-product-id="{{ product.pk }}"
      data-category="women|women-jeans|women-skirt"
-     data-brand="brand1" data-price="{{ product.price }}"
-     data-colors="red|blue|black|white"
-     data-size="S|M|L">
+     data-brand="{{ product.attr.brand }}" data-price="{{ product.price }}"
+     data-colors="{{ product|get_variant_values:'color'|join:'|' }}"
+     data-size="{{ product|get_variant_values:'size'|join:'|' }}">
   <div class="entry-media">
     {% block product_image %}
         {% with image=product.primary_image %}
@@ -21,50 +22,50 @@
         {% endwith %}
     {% endblock %}
 
-	<div class="hover">
-	  <a href="{{ product.get_absolute_url }}" class="entry-url"></a>
-	  <ul class="icons unstyled">
-		<li>
+    <div class="hover">
+      <a href="{{ product.get_absolute_url }}" class="entry-url"></a>
+      <ul class="icons unstyled">
+        <li>
           {% purchase_info_for_product request product as session %}
           {% if not session.availability.is_available_to_buy %}
-		  <div class="circle ribbon ribbon-unavailable">Sold</div>
+          <div class="circle ribbon ribbon-unavailable">Sold</div>
           {% else %}
-		  <div class="circle ribbon ribbon-sale">Sale</div>
+          <div class="circle ribbon ribbon-sale">Sale</div>
           {% endif %}
-		</li>
-		<li>
-		  <a href="#" class="circle" data-toggle="lightbox"><i class="iconfont-search"></i></a>
-		</li>
+        </li>
+        <li>
+          <a href="#" class="circle" data-toggle="lightbox"><i class="iconfont-search"></i></a>
+        </li>
         {% if not product.is_parent %}
         {% include "catalogue/partials/add_to_basket_form_compact.html" %}
         {% endif %}
-	  </ul>
+      </ul>
 
       {% block product_review %}
       {% iffeature "reviews" %}
-	  <div class="rate-bar">
-		<input type="range" value="{{ product.rating|default:0 }}" step="0.5" id="backing{{ product.pk }}" />
-		<div class="rateit" data-rateit-backingfld="#backing{{ product.pk }}" data-rateit-starwidth="12"
+      <div class="rate-bar">
+        <input type="range" value="{{ product.rating|default:0 }}" step="0.5" id="backing{{ product.pk }}" />
+        <div class="rateit" data-rateit-backingfld="#backing{{ product.pk }}" data-rateit-starwidth="12"
              data-rateit-starheight="12" data-rateit-resetable="false"
              data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5"></div>
-	  </div>
+      </div>
       {% endiffeature %}
       {% endblock %}
-	</div>
+    </div>
   </div>
   <div class="entry-main">
     {% block product_title %}
-	<h5 class="entry-title">
-	  <a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">{{ product.get_title|truncatewords:4 }}</a>
-	</h5>
+    <h5 class="entry-title">
+      <a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">{{ product.get_title|truncatewords:4 }}</a>
+    </h5>
     {% endblock %}
     {% block product_price %}
-	<div class="entry-price">
+    <div class="entry-price">
       {% include "catalogue/partials/stock_record.html" %}
-	</div>
-	<div class="entry-links clearfix">
+    </div>
+    <div class="entry-links clearfix">
       {% include 'catalogue/partials/add_to_wishlist.html'%}
-	</div>
+    </div>
     {% endblock %}
   </div>
 </div>

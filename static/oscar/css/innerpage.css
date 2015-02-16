@@ -561,3 +561,39 @@
 .store-list > li:hover {
 	background: #d1d1d1;
 }
+
+#filter-by-color .color-selector-black {
+    background: #000;
+}
+
+#filter-by-color .color-selector-white {
+    background: #fff; border-color: #acacac;
+}
+
+#filter-by-color .color-selector-green {
+    background: #60bd0d;
+}
+
+#filter-by-color .color-selector-red {
+    background: #ff5757;
+}
+
+#filter-by-color .color-selector-blue {
+    background: #0d9abd;
+}
+
+#filter-by-color .color-selector-brown {
+    background: #c57313;
+}
+
+#filter-by-color .color-selector-purple {
+    background: #a613c5;
+}
+
+#filter-by-color .color-selector-silver {
+    background: #e5e5e8;
+}
+
+#filter-by-color .color-selector-patternie {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAHklEQVQIW2NkYGD4D8QgwAgjMASgCiAqwcqgACwAAIrDBAOqGrGNAAAAAElFTkSuQmCC');
+}

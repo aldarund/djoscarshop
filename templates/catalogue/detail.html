@@ -1,6 +1,8 @@
 {% extends "oscar/catalogue/detail.html" %}
 {% load i18n %}
 {% load staticfiles %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
 
 {% block breadcrumbs %}
 <!-- BREADCRUMB -->
@@ -72,57 +74,71 @@
 			  </header>
 			  <article class="entry-content">
 				<figure>
-				  <span class="entry-price inline-middle">$120</span>
+                  {% purchase_info_for_product request product as session %}
+
+                  {% if session.price.exists %}
+				  <span class="entry-price inline-middle">
+                    {% if session.price.is_tax_known %}
+                    {{ session.price.incl_tax|currency:session.price.currency }}
+                    {% else %}
+                    {{ session.price.excl_tax|currency:session.price.currency }}
+                    {% endif %}
+                  </span>
+                  {% endif %}
 				  <div class="rate-bar inline-middle">
-					<input type="range" value="4.5" step="0.5" id="backing0" />
-					<div class="rateit" data-rateit-backingfld="#backing0" data-rateit-starwidth="12" data-rateit-starheight="12" data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5"></div>
+					<input type="range" value="{{ product.rating|default:0 }}" step="0.5" id="backing{{ product.pk }}" />
+					<div class="rateit" data-rateit-backingfld="#backing{{ product.pk }}"
+                         data-rateit-starwidth="12" data-rateit-starheight="12"
+                         data-rateit-resetable="false"  data-rateit-ispreset="true"
+                         data-rateit-min="0" data-rateit-max="5"></div>
 				  </div>
-				  <span class="entry-review-count inline-middle">( 2 Reviews )</span>
+				  <span class="entry-review-count inline-middle">( {{ product.reviews.count }} Reviews )</span>
 
 				  <ul class="entry-meta unstyled">
 					<li>
 					  <span class="key">Brand:</span>
-					  <span class="value">Versace</span>
+					  <span class="value">{{ product.attr.brand }}</span>
 					</li>
 					<li>
 					  <span class="key">Availability:</span>
+                      {% if session.availability.is_available_to_buy %}
 					  <span class="value">In Stock</span>
+                      {% else %}
+					  <span class="value">Sold</span>
+                      {% endif %}
 					</li>
+                    {% if product.upc %}
 					<li>
-					  <span class="key">Product Code:</span>
-					  <span class="value">GF-123456</span>
+					  <span class="key">{% trans 'UPC' %}:</span>
+					  <span class="value">{{ product.upc }}</span>
 					</li>
+                    {% endif %}
 				  </ul>
 
 				  <div class="clearfix"></div>
 
+                  {% block product_description %}
 				  <figcaption class="m-b-sm">
-					<h5 class="subheader uppercase">Quick Overview:</h5>
-					<p>Ut suscipit senectus ligula in non nisi nam lobortis sapien curabitur diam, fames morbi pharetra adipiscing massa ornare habitant quam eu placerat himenaeos, sem mattis tortor pretium tortor varius pretium nam metus euismod.</p>
+					<h5 class="subheader uppercase">{% trans 'Product Description' %}:</h5>
+					<p>{{ product.description|default:""|striptags }}</p>
 				  </figcaption>
+                  {% endblock %}
 
 				  <div class="row">
+                    {% for av in product.attribute_values.all %}
 					<div class="col-xs-12 col-sm-6">
-					  <h5 class="subheader uppercase">Color:</h5>
+					  <h5 class="subheader uppercase">{{ av.attribute.name|title }}:</h5>
 					  <div class="inline-middle styled-dd">
 						<select>
-						  <option>-- Please Select --</option>
-						  <option value="Black">Black</option>
-						  <option value="Aubergine">Aubergine</option>
+						  <option>{{ av.value_as_text }}</option>
+                          {% for choice in av.value.group.options.all %}
+						  <option value="{{ choice.name }}">{{ choice.option }}</option>
+                          {% endfor %}
 						</select>
 					  </div>
 					</div>
 					<div class="space30 visible-xs"></div>
-					<div class="col-xs-12 col-sm-6">
-					  <h5 class="subheader uppercase">Size:</h5>
-					  <div class="inline-middle styled-dd">
-						<select>
-						  <option>-- Please Select --</option>
-						  <option value="xs">X-Small</option>
-						  <option value="s">Small</option>
-						</select>
-					  </div>
-					</div>
+                    {% endfor %}
 				  </div>
 
 				  <ul class="inline-li li-m-r-l m-t-lg">
