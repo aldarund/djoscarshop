@@ -8,10 +8,10 @@ register = template.Library()
 
 @register.assignment_tag()
 def get_variant_options(code):
-    attr = ProductAttribute.objects.filter(option_group__isnull=False).get(code=code)
+    attr = ProductAttribute.objects.filter(option_group__isnull=False, code=code)
     return {
         'group': attr,
-        'options': attr.option_group.options.all(),
+        'options': attr[0].option_group.options.all(),
     }
 
 @register.filter()
