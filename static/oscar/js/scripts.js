@@ -126,6 +126,10 @@ jQuery(function($) {
 			$(this).find('select').simulate('mousedown');
 	});
 
+	$('.styled-dd select').change(function() {
+        window.location.href = jQuery.query.set('limit', $(this).find('option:selected').text());
+	});
+
 
 	/*
 	| ----------------------------------------------------------------------------------

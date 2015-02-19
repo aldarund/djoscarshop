@@ -268,6 +268,7 @@ jQuery(function($) {
 		var products = $product_layout.find('.mix-item').filter(function() {
 			var price = $(this).find(' > .product').data('price');
 			if ( price === undefined ) return false;
+            price = parseFloat(price);
 			return ( price >= value[0] && price < value[1] ) ? true : false;
 		});
 

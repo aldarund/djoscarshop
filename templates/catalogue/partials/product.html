@@ -8,9 +8,15 @@
 {% load product_variants %}
 
 {% block product %}
+{% purchase_info_for_product request product as session %}
 <div class="product" data-product-id="{{ product.pk }}"
      data-category="women|women-jeans|women-skirt"
-     data-brand="{{ product.attr.brand }}" data-price="{{ product.price }}"
+     data-brand="{{ product.attr.brand }}"
+     {% if session.price.is_tax_known %}
+     data-price="{{ session.price.incl_tax|default:0 }}"
+     {% else %}
+     data-price="{{ session.price.excl_tax|default:0 }}"
+     {% endif %}
      data-colors="{{ product|get_variant_values:'color'|join:'|' }}"
      data-size="{{ product|get_variant_values:'size'|join:'|' }}">
   <div class="entry-media">

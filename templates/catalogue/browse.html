@@ -56,10 +56,14 @@
                   {% for tree_category, info in tree_categories %}
                   {% if info.has_children %}
                     <li>
-                      <input type="checkbox" id="check-women" class="prettyCheckable" data-label="{{ tree_category.name }}" data-labelPosition="right" value="women" />
+                      <input type="checkbox" id="check-{{ tree_category.slug }}"
+                             class="prettyCheckable" data-label="{{ tree_category.name }}"
+                             data-labelPosition="right" value="{{ tree_category.slug }}" />
                       <ul>
                   {% else %}
-                        <li><input type="checkbox" id="check-women-accessories" class="prettyCheckable" data-label="{{ tree_category.name }}" data-labelPosition="right" value="women-accessories" /></li>
+                        <li><input type="checkbox" id="check-{{ tree_category.slug }}" class="prettyCheckable"
+                                   data-label="{{ tree_category.name }}" data-labelPosition="right"
+                                   value="{{ tree_category.slug }}" /></li>
                   {% endif %}
                   {% for close in info.num_to_close %}
                       </ul>
@@ -225,10 +229,9 @@
                                                 <span class="inline-middle m-r-sm text-xs">Show</span>
                                                 <div class="inline-middle styled-dd">
                                                     <select>
-                                                        <option value="9">9</option>
-                                                        <option value="12" selected>12</option>
-                                                        <option value="24">24</option>
-                                                        <option value="36">36</option>
+                                                      {% for num in page_limit_sizes %}
+                                                        <option value="{{ num }}"{% if num == paginator.per_page %} selected{% endif %}>{{ num }}</option>
+                                                      {% endfor %}
                                                     </select>
                                                 </div>
                                             </div>
