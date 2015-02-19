@@ -34,11 +34,13 @@
 					<table class="tbl-cart">
 						<thead>
 							<tr>
+                              {% block basket_form_headers %}
 								<th>Product Name</th>
 								<th style="width: 15%;">{% trans 'Price' %}</th>
 								<th style="width: 15%;">{% trans 'Quantity' %}</th>
 								<th class="hidden-xs" style="width: 15%;">{% trans 'Total' %}</th>
 								<th class="hidden-xs" style="width: 10%;"></th>
+                              {% endblock %}
 							</tr>
 						</thead>
 						<tbody>
@@ -73,7 +75,10 @@
 								<td>
 									<div class="qty-btn-group">
 										<button type="button" class="down"><i class="iconfont-caret-down inline-middle"></i></button>
-                                        {{ form.quantity }}
+                                        <input type="text" pattern="[0-9]+"
+                                               id="{{ form.quantity.id_for_label }}"
+                                               name="{{ form.quantity.name }}"
+                                               value="{{ form.quantity.value }}">
 										<button type="button" class="up"><i class="iconfont-caret-up inline-middle"></i></button>
 									</div>
 								</td>
@@ -135,17 +140,6 @@
 			</section>
 		</main>
 		<!-- // SITE MAIN CONTENT -->
-
-    {% block basket_form_headers %}
-        <!-- <div class="basket-title hidden-phone"> -->
-        <!--     <div class="row-fluid"> -->
-        <!--         <h2 class="span6 h3">{% trans "Items to buy now" %}</h2> -->
-        <!--         <p class="span3 h3">{% trans "Quantity" %}</p> -->
-        <!--         <p class="span1 h3 align-right">{% trans "Price" %}</p> -->
-        <!--         <p class="span2 h3 align-right">{% trans "Total" %}</p> -->
-        <!--     </div> -->
-        <!-- </div> -->
-    {% endblock %}
 
     {% block basket_form_main %}
         <!-- <form action="." method="post" class="basket_summary" id="basket_formset"> -->
