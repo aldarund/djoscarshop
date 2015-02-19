@@ -40,7 +40,7 @@
               {% if user.is_authenticated %}
 			  <li><a href="{% url 'customer:summary' %}">{% trans 'Account' %}</a></li>
 			  <li><a href="{% url 'customer:wishlists-list' %}">{% trans 'Wish Lists' %}</a></li>
-			  <li><a href="checkout.html">Checkout</a></li>
+			  <li><a href="{% url 'checkout:index' %}">{% trans 'Checkout' %}</a></li>
 			  <li><a href="{% url 'customer:logout' %}">{% trans 'Logout' %}</a></li>
               {% else %}
 			  <li><a href="{% url 'customer:login' %}">{% trans 'Login or register' %}</a></li>
